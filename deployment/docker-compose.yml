@@ -1,0 +1,53 @@
+version: "3.8"
+
+services:
+  signaling-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    environment:
+      NODE_ENV: development
+      PORT: 3001
+      HOST: 0.0.0.0
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+    networks:
+      - game-network
+
+  # Optional: MongoDB for storing room history (for production)
+  mongodb:
+    image: mongo:6-alpine
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: securepassword
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - game-network
+
+  # Optional: Redis for caching + pub/sub (for production)
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - game-network
+
+volumes:
+  mongodb_data:
+  redis_data:
+
+networks:
+  game-network:
+    driver: bridge

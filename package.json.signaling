@@ -1,0 +1,37 @@
+{
+  "name": "echi-di-gloria",
+  "version": "0.4.0",
+  "description": "Competitive Collectible Card Game with P2P WebRTC Multiplayer",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "server:dev": "ts-node src/server/signalingServer.ts",
+    "server:build": "tsc src/server/signalingServer.ts --outDir dist/",
+    "server:start": "node dist/server/signalingServer.js",
+    "docker:build": "docker build -t echi-signaling:latest deployment/",
+    "docker:run": "docker run -p 3001:3001 echi-signaling:latest",
+    "docker:compose": "docker-compose -f deployment/docker-compose.yml up -d",
+    "test": "vitest",
+    "test:load": "artillery run deployment/load-test.yml"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "express": "^4.18.2",
+    "socket.io": "^4.7.2",
+    "socket.io-client": "^4.7.2",
+    "cors": "^2.8.5",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.2.2",
+    "@types/node": "^20.5.0",
+    "@types/express": "^4.17.17",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "ts-node": "^10.9.1",
+    "vite": "^4.4.9",
+    "vitest": "^0.34.2"
+  }
+}
