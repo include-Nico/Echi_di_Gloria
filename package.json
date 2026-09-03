@@ -1,0 +1,34 @@
+{
+  "name": "echi-di-gloria-ccg",
+  "version": "0.1.0",
+  "description": "Echi di Gloria - Collectible Card Game with P2P matchmaking, AI bot, and economy system",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "node --loader ts-node/esm tests/BalanceValidator.test.ts",
+    "lint": "eslint src --ext .ts",
+    "format": "prettier --write \"src/**/*.ts\""
+  },
+  "keywords": [
+    "ccg",
+    "card-game",
+    "p2p",
+    "matchmaking",
+    "ai",
+    "webrtc",
+    "qr-code"
+  ],
+  "author": "Include Nico",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.0.0",
+    "prettier": "^3.0.0",
+    "ts-node": "^10.9.0",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {}
+}
