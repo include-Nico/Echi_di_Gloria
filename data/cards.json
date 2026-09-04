@@ -1,0 +1,72 @@
+[
+  {
+    "id": "VIK_001",
+    "name": "Classico Vichingo Base",
+    "faction": "Vichinghi",
+    "cost": 2,
+    "attack": 3,
+    "defense": 2,
+    "rarity": "Comune",
+    "keywords": ["Furia"],
+    "art": "https://lh3.googleusercontent.com/aida-public/AB6AXuDpiMSftlbBYWJIGEuY_7L4pvuxvz8QaCn04mqLYn3TaFbX8_hR1QDLKn0UCnf3n92Mti1LHwfU442UI72CbyPLAPdUHZ6Vzs5SzThWbO4_dX2T-1_CSvKljwp3pHzATMzDbDspV8cc1cx-0BHCSVHdZf7nPunoJYq_hpDhMVhnHrEV9X8tU3gSEkvrSFM9MjLbkINf9g8IfPHy1ZCPaZlDHH4l2Z3LrpsmYcVqhWlstpKBedpzuImWCA"
+  },
+  {
+    "id": "VIK_003",
+    "name": "Berserker",
+    "faction": "Vichinghi",
+    "cost": 4,
+    "attack": 5,
+    "defense": 2,
+    "rarity": "Rara",
+    "keywords": ["Senza Paura", "Furia"],
+    "art": "https://lh3.googleusercontent.com/aida-public/AB6AXuCMtrFSEQ3-mfv9ksxWBsdZn1XSlxacxb5n41fUzfF1nVdB7l1c7-QFFga7BkbU46mA2H8sLigNQzorK9TvJ1hkLTUX8EV0mZ2X84zZhBes7g4tyB35mWTHPg7zAX3VFjnIA-qBK0HWO_4GnWRH741Fz9qD8bb-IyJitE6yRb39hdLfQxtgKA8o0c0IPtG6Jgur7Lr0HqnOBJ_HPeIX-elqF3yi_r4lFZBaMKoiM0Az333fbLsV4Tsh-A"
+  },
+  {
+    "id": "MED_001",
+    "name": "Crociato",
+    "faction": "Medioevo",
+    "cost": 2,
+    "attack": 2,
+    "defense": 3,
+    "rarity": "Comune",
+    "keywords": ["Scudo Sacro"],
+    "art": "https://lh3.googleusercontent.com/aida-public/AB6AXuA0C5LMqAmqkr4WDknoWSJE0Cz__qdsbRDLa0i922VXOS9OmCdwOwV_HwU5yO_Cr9H0QlMd7n-9yeoik0liA6cSLM1qF_CQq5coJGS7B4tJZixvDiJys1IGbpDCz9nFmU48whiKd14Qd6wKF0eUcbM_8b8CjHYHOEHpM37MRZutv5_-W-M7DKfiUietsGeuezdPbaMbcy4U9Yo4aac3E0YfOd7O3Uk500C39-vEOI8Wsi-7QwKH54_XgQ"
+  },
+  {
+    "id": "MED_003",
+    "name": "Balestrieri",
+    "faction": "Medioevo",
+    "cost": 3,
+    "attack": 4,
+    "defense": 1,
+    "rarity": "Comune",
+    "keywords": ["Carica Lenta"],
+    "art": "https://lh3.googleusercontent.com/aida-public/AB6AXuDnEMFHV2y7EDwIN8LcWTyF351WxJ0Wkc4NkLYg4X-A4shpTOlC_6n6-wmx1jnV59G_hdjpu14VUKMxwmPDnai62B_f87QTiCqDzMTXHlqjI65bk1f3nCdIbe7tyd-_BYR3A_NlSKYPNqoD1Z2QCWdrGbxXD8U8PqcsiUZkSV9U132jXGoGg4dAWOWJ1hoEi8WYdYY-6nhyf_v3KBkUT6QeVz6KBbVV-mszjmogE969k9rC3XOTrocNhA"
+  },
+  {
+    "id": "NAT_001",
+    "name": "Indigeno",
+    "faction": "Nativi",
+    "cost": 1,
+    "attack": 1,
+    "defense": 2,
+    "rarity": "Comune",
+    "keywords": ["Sopravvivenza"],
+    "art": "https://lh3.googleusercontent.com/aida-public/AB6AXuD_r7cYtNiag3ya5OawcWvIKXMBN00-bi-PHXio5_Ev2yCMSw3PN5-xFRsqe6uDbcH-Y42j3DHYbuzlgZJIGn5pSCheQxMoWNoUwe4izfwhoJnHaZeZOkKJ-olqPkKpF7QEkQ451N2eVRxveQWkEDqlr8PqxyHO1bnsKOlT3ooZi7byjObfyvzSDbssDcaI_21b3XgV0dfregHf7XkAYT2NsdTetCpn4o6FyubTtYFxGTtv9djLwUYzNg"
+  },
+  {
+    "id": "VIK_007",
+    "name": "Thor",
+    "faction": "Vichinghi",
+    "cost": 8,
+    "attack": 7,
+    "defense": 7,
+    "rarity": "Leggendaria",
+    "ability": {
+      "name": "Martello di Tuono",
+      "cost": 3,
+      "desc": "Infligge 4 danni a tutte le creature nemiche"
+    },
+    "art": "https://lh3.googleusercontent.com/aida-public/AB6AXuBhLXQE4vk8EKd2Ety4Y2ix-qO6-pX54YodeiuL7MvAqvKhiGv47uIrk_IfoCXYrSe-RHQU26lvve1aWuZdGEXycS8LjoxrdxgQHX0R0tCvI_B50a08EsNmzJ2nUA_pIDNCCDKv2P7XyV4f4Iw7Xd-6ylNDs-6vlBJQ1Z0UznwPKG8FDDnetbt_XIhYXcR0aURzOiGxjJFn7Zv0cCLILeyZHU9gRut18DoIsgdRIldLD-k1zBgfJ0jnIQ"
+  }
+]

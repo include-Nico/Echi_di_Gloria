@@ -1,13 +1,86 @@
 <!DOCTYPE html>
-<html lang="it">
+<html class="dark" lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Echi di Gloria - Collectible Card Game</title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
+  <title>Echi di Gloria - CCG Tattico</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@400;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            surface: "#17130f",
+            "surface-container-lowest": "#110d0a",
+            "surface-container-low": "#1f1b17",
+            "surface-container": "#231f1b",
+            "surface-container-high": "#2e2925",
+            "surface-container-highest": "#393430",
+            primary: "#f2ca50",
+            secondary: "#bdf4ff",
+            tertiary: "#ffbebe",
+            error: "#ffb4ab",
+            "on-surface": "#ebe0db",
+            "on-surface-variant": "#d0c5af"
+          },
+          fontFamily: {
+            display: ["Cinzel Decorative"],
+            body: ["Cinzel"],
+            tactical: ["Space Grotesk"]
+          }
+        }
+      }
+    };
+  </script>
 </head>
-<body>
-  <div id="root"></div>
-  <script type="module" src="/src/main.tsx"></script>
+<body class="bg-surface font-body text-on-surface antialiased flex flex-col min-h-screen select-none">
+  
+  <!-- Header Risorse Comune -->
+  <header class="fixed top-0 w-full z-50 h-16 bg-surface-container-lowest/90 backdrop-blur-md flex items-center justify-between px-4 border-b border-surface-container-high">
+    <div class="flex items-center gap-2">
+      <span class="material-symbols-outlined text-primary text-2xl">shield</span>
+      <span class="font-display font-bold text-primary tracking-wide">Echi di Gloria</span>
+    </div>
+    <div class="flex items-center gap-3 font-tactical text-xs">
+      <div class="flex items-center gap-1 bg-surface-container px-2 py-1 rounded">
+        <span class="material-symbols-outlined text-primary text-sm">monetization_on</span>
+        <span id="silverCount">1,450</span>
+      </div>
+      <div class="flex items-center gap-1 bg-surface-container px-2 py-1 rounded">
+        <span class="material-symbols-outlined text-secondary text-sm">diamond</span>
+        <span id="gemsCount">320</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Contenitore Viste Dinamico -->
+  <main id="appRoot" class="flex-1 pt-16 pb-20 overflow-y-auto"></main>
+
+  <!-- Barra di Navigazione Inferiore -->
+  <nav class="fixed bottom-0 w-full h-16 z-50 bg-surface-container-lowest/95 backdrop-blur-md flex items-center justify-around border-t border-surface-container-high font-tactical text-xs">
+    <button onclick="navigate('arena')" class="nav-btn flex flex-col items-center text-primary" data-view="arena">
+      <span class="material-symbols-outlined">swords</span>
+      <span>Arena</span>
+    </button>
+    <button onclick="navigate('campaign')" class="nav-btn flex flex-col items-center text-on-surface-variant" data-view="campaign">
+      <span class="material-symbols-outlined">auto_stories</span>
+      <span>Campagna</span>
+    </button>
+    <button onclick="navigate('collection')" class="nav-btn flex flex-col items-center text-on-surface-variant" data-view="collection">
+      <span class="material-symbols-outlined">style</span>
+      <span>Collezione</span>
+    </button>
+    <button onclick="navigate('shop')" class="nav-btn flex flex-col items-center text-on-surface-variant" data-view="shop">
+      <span class="material-symbols-outlined">storefront</span>
+      <span>Negozio</span>
+    </button>
+  </nav>
+
+  <script type="module" src="js/app.js"></script>
 </body>
 </html>
