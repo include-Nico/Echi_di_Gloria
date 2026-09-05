@@ -2,10 +2,11 @@ import { gameState } from '../state.js';
 
 export function renderArena() {
   const container = document.createElement('div');
-  container.className = 'flex flex-col w-full h-full select-none overflow-hidden relative';
+  container.className = 'flex flex-col w-full h-full select-none overflow-hidden relative bg-surface';
 
   let viewState = 'lobby'; 
   let botDifficulty = 'Facile';
+  let lobbyTab = 'ia'; // 'ia' | 'pvp'
   
   let selectedHandIndex = null;
   let selectedFriendlySlot = null;
@@ -14,6 +15,7 @@ export function renderArena() {
     container.innerHTML = '';
     if (viewState === 'lobby') {
       container.appendChild(renderLobby());
+      attachLobbyListeners();
     } else if (viewState === 'loading') {
       container.appendChild(renderLoading());
     } else if (viewState === 'battle') {
@@ -22,92 +24,176 @@ export function renderArena() {
     }
   }
 
+  // ==========================================
+  // 1. LOBBY PRE-PARTITA (IL SANCTUM)
+  // ==========================================
   function renderLobby() {
     const el = document.createElement('div');
-    el.className = 'flex flex-col gap-4 p-4 h-full overflow-y-auto w-full max-w-md mx-auto';
+    el.className = 'relative flex flex-col w-full h-full overflow-y-auto';
+    
+    // Background Immersivo
+    const bgUrl = "https://image.pollinations.ai/prompt/dark%20fantasy%20war%20room%20table%20map%20glowing%20runes%20dim%20lighting?width=800&height=1200&nologo=true";
+    
     el.innerHTML = `
-      <div class="text-center mt-2 mb-4">
-        <h2 class="font-display font-bold text-2xl text-primary tracking-widest drop-shadow-md">IL SANCTUM</h2>
-        <p class="font-tactical text-[11px] text-on-surface-variant uppercase mt-1">Scegli il tuo campo di battaglia</p>
+      <div class="absolute inset-0 z-0">
+        <img src="${bgUrl}" class="w-full h-full object-cover opacity-20 mix-blend-overlay" />
+        <div class="absolute inset-0 bg-gradient-to-b from-surface via-surface/80 to-surface-container-lowest"></div>
       </div>
 
-      <div class="bg-surface-container-low border border-outline-variant p-4 rounded-xl shadow-lg flex flex-col gap-3 relative overflow-hidden">
-        <div class="absolute -right-6 -top-6 w-24 h-24 bg-error/10 rounded-full blur-2xl pointer-events-none"></div>
-        <div class="flex items-center gap-2 border-b border-surface-container-high pb-2">
-          <span class="material-symbols-outlined text-error text-xl">smart_toy</span>
-          <h3 class="font-display font-bold text-sm text-error">SFIDA CONTRO L'IA</h3>
+      <div class="relative z-10 flex flex-col gap-5 p-4 max-w-md mx-auto w-full pb-20">
+        
+        <div class="text-center mt-4">
+          <span class="material-symbols-outlined text-4xl text-primary drop-shadow-[0_0_15px_rgba(242,202,80,0.8)]">fort</span>
+          <h2 class="font-display font-bold text-3xl text-on-surface tracking-widest mt-1">IL SANCTUM</h2>
+          <p class="font-tactical text-[11px] text-primary tracking-widest uppercase mt-1">Preparazione alla Battaglia</p>
         </div>
-        
-        <label class="font-tactical text-[10px] text-on-surface-variant">SELEZIONA DIFFICOLTÀ</label>
-        <select id="difficultySelect" class="w-full bg-surface-container-lowest border border-outline-variant text-on-surface font-tactical text-xs p-2.5 rounded outline-none focus:border-error">
-          <option value="Facile">Facile (Solo Comuni) • Premio: 10 Monete</option>
-          <option value="Medio">Medio (Non Comuni/Rare) • Premio: 20 Monete</option>
-          <option value="Difficile">Difficile (Sinergie) • Premio: 30 Monete</option>
-          <option value="Boss">Boss (Deck Leggendario) • Premio: 50 Monete + Carta</option>
-        </select>
-        
-        <button id="startBotBtn" class="w-full py-3 bg-error-container text-on-error-container hover:bg-error hover:text-on-error font-tactical font-bold text-xs rounded shadow-lg active:scale-95 transition-all mt-2">
-          CERCA AVVERSARIO
-        </button>
-      </div>
 
-      <div class="bg-surface-container-low border border-outline-variant p-4 rounded-xl shadow-lg flex flex-col gap-3 relative overflow-hidden mt-2">
-        <div class="absolute -left-6 -bottom-6 w-24 h-24 bg-secondary/10 rounded-full blur-2xl pointer-events-none"></div>
-        <div class="flex items-center gap-2 border-b border-surface-container-high pb-2">
-          <span class="material-symbols-outlined text-secondary text-xl">group</span>
-          <h3 class="font-display font-bold text-sm text-secondary">DUELLO TRA AMICI</h3>
+        <!-- Selettore Modalità -->
+        <div class="flex bg-surface-container-highest/50 backdrop-blur-md rounded-xl p-1 shadow-inner border border-outline-variant/30">
+          <button id="tabIaBtn" class="flex-1 py-2.5 rounded-lg font-tactical text-xs font-bold transition-all flex items-center justify-center gap-2 ${lobbyTab === 'ia' ? 'bg-primary text-on-primary shadow-lg' : 'text-on-surface-variant hover:text-on-surface'}">
+            <span class="material-symbols-outlined text-[16px]">smart_toy</span> IA & ALLENAMENTO
+          </button>
+          <button id="tabPvpBtn" class="flex-1 py-2.5 rounded-lg font-tactical text-xs font-bold transition-all flex items-center justify-center gap-2 ${lobbyTab === 'pvp' ? 'bg-secondary text-on-secondary shadow-lg' : 'text-on-surface-variant hover:text-on-surface'}">
+            <span class="material-symbols-outlined text-[16px]">group</span> DUELLO PVP
+          </button>
         </div>
-        
-        <div class="flex gap-2 items-end mt-1">
-          <div class="flex flex-col flex-1 gap-1">
-            <label class="font-tactical text-[10px] text-on-surface-variant">CODICE STANZA (6 CIFRE)</label>
-            <input type="text" placeholder="000000" maxlength="6" class="w-full bg-surface-container-lowest border border-outline-variant text-secondary font-tactical text-center text-lg p-2 rounded outline-none focus:border-secondary" />
+
+        <!-- CONTENUTO TAB: IA -->
+        <div id="contentIa" class="flex flex-col gap-4 ${lobbyTab === 'ia' ? '' : 'hidden'}">
+          <div class="text-center">
+            <span class="font-tactical text-[10px] text-on-surface-variant uppercase tracking-widest">Scegli l'intensità della sfida</span>
           </div>
-          <button class="bg-surface-container-highest text-on-surface hover:text-secondary border border-outline-variant hover:border-secondary p-3 rounded active:scale-95 transition-all">
-            <span class="material-symbols-outlined text-[20px]">login</span>
+          
+          <div class="grid grid-cols-2 gap-3">
+            <div class="diff-card relative p-3 rounded-xl border cursor-pointer transition-all ${botDifficulty === 'Facile' ? 'bg-surface-container-high border-[#4ade80] shadow-[0_0_15px_rgba(74,222,128,0.2)] scale-105' : 'bg-surface-container-lowest border-outline-variant/50 hover:border-outline-variant'}" data-diff="Facile">
+              <div class="flex items-center gap-1 mb-1">
+                <span class="material-symbols-outlined text-[#4ade80] text-[16px]">eco</span>
+                <span class="font-display font-bold text-xs text-[#4ade80]">FACILE</span>
+              </div>
+              <p class="font-body text-[9px] text-on-surface-variant leading-tight">Solo carte comuni. Il bot commette errori tattici.</p>
+              <div class="mt-2 pt-2 border-t border-outline-variant/30 flex items-center justify-between">
+                <span class="font-tactical text-[8px] text-outline uppercase">Premio</span>
+                <span class="font-tactical text-[10px] text-on-surface flex items-center gap-1"><span class="material-symbols-outlined text-[12px] text-primary">toll</span> 10</span>
+              </div>
+            </div>
+
+            <div class="diff-card relative p-3 rounded-xl border cursor-pointer transition-all ${botDifficulty === 'Medio' ? 'bg-surface-container-high border-[#60a5fa] shadow-[0_0_15px_rgba(96,165,250,0.2)] scale-105' : 'bg-surface-container-lowest border-outline-variant/50 hover:border-outline-variant'}" data-diff="Medio">
+              <div class="flex items-center gap-1 mb-1">
+                <span class="material-symbols-outlined text-[#60a5fa] text-[16px]">shield</span>
+                <span class="font-display font-bold text-xs text-[#60a5fa]">MEDIO</span>
+              </div>
+              <p class="font-body text-[9px] text-on-surface-variant leading-tight">Mazzi bilanciati. Logica di attacco ottimizzata.</p>
+              <div class="mt-2 pt-2 border-t border-outline-variant/30 flex items-center justify-between">
+                <span class="font-tactical text-[8px] text-outline uppercase">Premio</span>
+                <span class="font-tactical text-[10px] text-on-surface flex items-center gap-1"><span class="material-symbols-outlined text-[12px] text-primary">toll</span> 20</span>
+              </div>
+            </div>
+
+            <div class="diff-card relative p-3 rounded-xl border cursor-pointer transition-all ${botDifficulty === 'Difficile' ? 'bg-surface-container-high border-[#f87171] shadow-[0_0_15px_rgba(248,113,113,0.2)] scale-105' : 'bg-surface-container-lowest border-outline-variant/50 hover:border-outline-variant'}" data-diff="Difficile">
+              <div class="flex items-center gap-1 mb-1">
+                <span class="material-symbols-outlined text-[#f87171] text-[16px]">local_fire_department</span>
+                <span class="font-display font-bold text-xs text-[#f87171]">DIFFICILE</span>
+              </div>
+              <p class="font-body text-[9px] text-on-surface-variant leading-tight">Mazzi mono-fazione. Il bot sfrutta le sinergie.</p>
+              <div class="mt-2 pt-2 border-t border-outline-variant/30 flex items-center justify-between">
+                <span class="font-tactical text-[8px] text-outline uppercase">Premio</span>
+                <span class="font-tactical text-[10px] text-on-surface flex items-center gap-1"><span class="material-symbols-outlined text-[12px] text-primary">toll</span> 30</span>
+              </div>
+            </div>
+
+            <div class="diff-card relative p-3 rounded-xl border cursor-pointer transition-all ${botDifficulty === 'Boss' ? 'bg-surface-container-high border-primary shadow-[0_0_20px_rgba(242,202,80,0.3)] scale-105' : 'bg-surface-container-lowest border-outline-variant/50 hover:border-outline-variant'}" data-diff="Boss">
+              <div class="flex items-center gap-1 mb-1">
+                <span class="material-symbols-outlined text-primary text-[16px]">stars</span>
+                <span class="font-display font-bold text-xs text-primary">BOSS</span>
+              </div>
+              <p class="font-body text-[9px] text-on-surface-variant leading-tight">Deck Leggendari maxati. Abilità uniche del boss.</p>
+              <div class="mt-2 pt-2 border-t border-outline-variant/30 flex items-center justify-between">
+                <span class="font-tactical text-[8px] text-outline uppercase">Premio</span>
+                <span class="font-tactical text-[10px] text-on-surface flex items-center gap-1 text-primary"><span class="material-symbols-outlined text-[12px]">style</span> +50</span>
+              </div>
+            </div>
+          </div>
+
+          <button id="startBotBtn" class="mt-4 w-full py-4 bg-primary hover:bg-primary-fixed-dim text-on-primary font-tactical text-sm font-bold rounded-xl shadow-[0_4px_20px_rgba(242,202,80,0.4)] active:scale-95 transition-all flex items-center justify-center gap-2">
+            <span class="material-symbols-outlined text-[20px]">swords</span> ENTRA NELL'ARENA
           </button>
         </div>
 
-        <div class="flex items-center gap-2 w-full mt-2">
-          <div class="h-px bg-surface-container-high flex-1"></div>
-          <span class="font-tactical text-[9px] text-outline-variant">OPPURE</span>
-          <div class="h-px bg-surface-container-high flex-1"></div>
-        </div>
+        <!-- CONTENUTO TAB: PVP -->
+        <div id="contentPvp" class="flex flex-col gap-6 ${lobbyTab === 'pvp' ? '' : 'hidden'}">
+          <div class="bg-surface-container-lowest/80 backdrop-blur border border-outline-variant/50 p-4 rounded-xl shadow-lg">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="material-symbols-outlined text-secondary text-[18px]">password</span>
+              <span class="font-display font-bold text-xs text-secondary">ACCESSO PRIVATO</span>
+            </div>
+            <div class="flex gap-2">
+              <input type="text" placeholder="CODICE" maxlength="6" class="flex-1 bg-surface-container-highest border border-outline-variant text-on-surface font-tactical text-center text-lg p-3 rounded-lg outline-none focus:border-secondary uppercase tracking-widest placeholder:text-outline-variant" />
+              <button class="bg-secondary text-on-secondary px-4 rounded-lg font-tactical font-bold text-xs active:scale-95 transition-all shadow-[0_0_15px_rgba(189,244,255,0.3)]">
+                UNISCITI
+              </button>
+            </div>
+          </div>
 
-        <div class="flex gap-2 mt-1">
-          <button class="flex-1 py-2.5 bg-surface-container-lowest border border-secondary/50 text-secondary font-tactical text-[10px] font-bold rounded flex items-center justify-center gap-1 active:scale-95 transition-all">
-            <span class="material-symbols-outlined text-[16px]">qr_code</span> GENERA QR
-          </button>
-          <button class="flex-1 py-2.5 bg-secondary text-on-secondary font-tactical text-[10px] font-bold rounded flex items-center justify-center gap-1 active:scale-95 transition-all">
-            <span class="material-symbols-outlined text-[16px]">qr_code_scanner</span> SCANSIONA
-          </button>
+          <div class="flex items-center gap-3 opacity-50">
+            <div class="h-px bg-outline-variant flex-1"></div>
+            <span class="font-tactical text-[9px] text-on-surface-variant uppercase tracking-widest">Incontro Locale</span>
+            <div class="h-px bg-outline-variant flex-1"></div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <button class="flex flex-col items-center justify-center gap-2 py-5 bg-surface-container-lowest/80 backdrop-blur border border-outline-variant/50 hover:border-secondary/50 rounded-xl text-secondary active:scale-95 transition-all group">
+              <span class="material-symbols-outlined text-3xl group-hover:scale-110 transition-transform">qr_code_2</span>
+              <span class="font-tactical text-[10px] font-bold tracking-wider">MOSTRA QR</span>
+            </button>
+            <button class="flex flex-col items-center justify-center gap-2 py-5 bg-surface-container-lowest/80 backdrop-blur border border-outline-variant/50 hover:border-secondary/50 rounded-xl text-secondary active:scale-95 transition-all group">
+              <span class="material-symbols-outlined text-3xl group-hover:scale-110 transition-transform">qr_code_scanner</span>
+              <span class="font-tactical text-[10px] font-bold tracking-wider">SCANSIONA QR</span>
+            </button>
+          </div>
         </div>
       </div>
     `;
-
-    el.querySelector('#startBotBtn').addEventListener('click', () => {
-      botDifficulty = el.querySelector('#difficultySelect').value;
-      initMatchState();
-      viewState = 'loading';
-      updateUI();
-    });
-
     return el;
   }
 
+  function attachLobbyListeners() {
+    const el = container;
+    el.querySelector('#tabIaBtn').addEventListener('click', () => { lobbyTab = 'ia'; updateUI(); });
+    el.querySelector('#tabPvpBtn').addEventListener('click', () => { lobbyTab = 'pvp'; updateUI(); });
+
+    if (lobbyTab === 'ia') {
+      const cards = el.querySelectorAll('.diff-card');
+      cards.forEach(card => {
+        card.addEventListener('click', () => {
+          botDifficulty = card.dataset.diff;
+          updateUI();
+        });
+      });
+
+      el.querySelector('#startBotBtn').addEventListener('click', () => {
+        initMatchState();
+        viewState = 'loading';
+        updateUI();
+      });
+    }
+  }
+
+  // ==========================================
+  // 2. SCHERMATA DI CARICAMENTO
+  // ==========================================
   function renderLoading() {
     const el = document.createElement('div');
-    el.className = 'flex flex-col items-center justify-center w-full h-full bg-surface-container-lowest p-6 text-center';
+    el.className = 'flex flex-col items-center justify-center w-full h-full bg-surface-container-lowest p-6 text-center z-50 absolute inset-0';
     el.innerHTML = `
       <div class="relative flex justify-center items-center mb-8">
         <span class="material-symbols-outlined text-6xl text-primary animate-spin" style="animation-duration: 3s;">settings_input_component</span>
         <span class="material-symbols-outlined text-4xl text-error absolute animate-pulse">swords</span>
       </div>
-      <h2 class="font-display font-bold text-xl text-on-surface mb-2">EVOCAZIONE DELL'ARENA</h2>
-      <p class="font-tactical text-xs text-on-surface-variant">Connessione al Sanctum... Preparazione mazzi (Difficoltà: ${botDifficulty}).</p>
+      <h2 class="font-display font-bold text-xl text-on-surface mb-2 tracking-widest">EVOCAZIONE IN CORSO</h2>
+      <p class="font-tactical text-xs text-on-surface-variant">Connessione al Sanctum... Avversario: Bot ${botDifficulty}.</p>
       
       <div class="w-full max-w-xs bg-surface-container-high h-1.5 rounded-full mt-8 overflow-hidden">
-        <div class="bg-primary h-full rounded-full transition-all duration-1000 w-0" id="loadingBar"></div>
+        <div class="bg-primary h-full rounded-full transition-all duration-1000 w-0 shadow-[0_0_10px_rgba(242,202,80,0.8)]" id="loadingBar"></div>
       </div>
     `;
 
@@ -124,6 +210,9 @@ export function renderArena() {
     return el;
   }
 
+  // ==========================================
+  // 3. CAMPO DI BATTAGLIA (ARENA) E TUTORIAL
+  // ==========================================
   function initMatchState() {
     const FULL_CARD_DB = gameState.databases.cards || [];
     
@@ -133,7 +222,6 @@ export function renderArena() {
     gameState.player.hp = 30;
     gameState.player.board = [null, null, null, null, null];
     
-    // Fallback sicuro se il DB non dovesse aver caricato alcune carte
     const card1 = FULL_CARD_DB.find(c => c.name === "Indigeno") || FULL_CARD_DB[0];
     const card2 = FULL_CARD_DB.find(c => c.name === "Berserker") || FULL_CARD_DB[0];
     const card3 = FULL_CARD_DB.find(c => c.name === "Arceri Base") || FULL_CARD_DB[0];
@@ -146,7 +234,7 @@ export function renderArena() {
     ].filter(Boolean);
 
     gameState.opponent.isBot = true;
-    gameState.opponent.name = `Bot ${botDifficulty}`;
+    gameState.opponent.name = `Guerriero d'Ombra`;
     gameState.opponent.faction = 'Medioevo';
     gameState.opponent.hp = 30;
     gameState.opponent.maxMana = 1;
@@ -162,25 +250,26 @@ export function renderArena() {
     const p = gameState.player;
     const o = gameState.opponent;
     const el = document.createElement('div');
-    el.className = 'flex flex-col w-full h-full';
+    el.className = 'flex flex-col w-full h-full bg-surface relative';
 
     el.innerHTML = `
+      <!-- ZONA AVVERSARIO -->
       <section class="relative px-3 pt-2 pb-3 bg-gradient-to-b from-surface-container-lowest to-surface-container-low shadow-md border-b border-outline-variant/30">
         <div class="flex items-center justify-between gap-2 mb-2">
           <div class="flex items-center gap-2">
             <div class="w-10 h-10 rounded-full bg-surface-container-highest shadow-inner p-0.5 relative border border-error/50">
-              <div class="absolute -bottom-1 -right-1 bg-surface-container-lowest text-error font-tactical text-[9px] px-1 rounded border border-error/50">BOT</div>
-              <img class="w-full h-full rounded-full object-cover" src="https://image.pollinations.ai/prompt/dark%20fantasy%20medieval%20knight%20commander%20portrait?width=100&height=100&nologo=true" />
+              <div class="absolute -bottom-1 -right-1 bg-error text-on-error font-tactical text-[9px] px-1 rounded shadow">IA ${botDifficulty.charAt(0)}</div>
+              <img class="w-full h-full rounded-full object-cover" src="https://image.pollinations.ai/prompt/dark%20fantasy%20shadow%20knight%20portrait?width=100&height=100&nologo=true" />
             </div>
             <div class="flex flex-col">
-              <span class="font-display font-bold text-sm text-on-surface">${o.name}</span>
+              <span class="font-display font-bold text-sm text-on-surface drop-shadow">${o.name}</span>
               <span class="font-tactical text-[9px] text-error">${o.faction}</span>
             </div>
           </div>
           
-          <button id="enemyHeroTarget" class="flex items-center gap-1 bg-error-container/20 border border-error px-2 py-1 rounded shadow cursor-crosshair hover:bg-error-container/40 transition-colors">
-            <span class="material-symbols-outlined text-error text-[14px]" style="font-variation-settings: 'FILL' 1;">favorite</span>
-            <span class="font-tactical text-sm text-error font-bold">${o.hp}</span>
+          <button id="enemyHeroTarget" class="flex items-center gap-1.5 bg-error-container/20 border border-error/50 px-3 py-1.5 rounded-lg shadow cursor-crosshair hover:bg-error-container/40 transition-colors">
+            <span class="material-symbols-outlined text-error text-[16px]" style="font-variation-settings: 'FILL' 1;">favorite</span>
+            <span class="font-tactical text-base text-error font-bold">${o.hp}</span>
           </button>
         </div>
 
@@ -189,6 +278,7 @@ export function renderArena() {
         </div>
       </section>
 
+      <!-- LOG COMBATTIMENTO -->
       <div class="relative my-2 px-3 flex flex-col gap-1 z-10 shrink-0">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2 bg-surface-container-highest/80 px-3 py-0.5 rounded-full shadow border border-primary/20">
@@ -199,12 +289,13 @@ export function renderArena() {
             <span class="material-symbols-outlined text-[14px]">diamond</span> MANA BOT: ${o.mana}
           </div>
         </div>
-        <div id="battleLog" class="bg-surface-container-lowest border border-outline-variant/50 px-2 py-1.5 rounded shadow-inner flex items-center gap-1 text-[10px] font-body text-on-surface-variant truncate">
+        <div id="battleLog" class="bg-surface-container-lowest border border-outline-variant/50 px-2 py-1.5 rounded shadow-inner flex items-center gap-1.5 text-[10px] font-body text-on-surface-variant truncate">
           <span class="material-symbols-outlined text-tertiary text-[14px]">info</span>
           <span>Il combattimento ha inizio. Tocca a te.</span>
         </div>
       </div>
 
+      <!-- ZONA GIOCATORE -->
       <section class="relative px-3 flex flex-col gap-2 flex-1 pb-4">
         <div class="grid grid-cols-5 gap-1.5" id="playerBoard">
           ${p.board.map((card, idx) => renderBoardSlot(card, idx, false)).join('')}
@@ -212,7 +303,7 @@ export function renderArena() {
 
         <div class="flex items-center justify-between bg-surface-container-lowest border border-primary/30 px-3 py-2 rounded-xl shadow-md mt-auto mb-1">
           <div class="flex items-center gap-2">
-            <span class="material-symbols-outlined text-primary text-2xl" style="font-variation-settings: 'FILL' 1;">favorite</span>
+            <span class="material-symbols-outlined text-primary text-2xl drop-shadow-[0_0_8px_rgba(242,202,80,0.5)]" style="font-variation-settings: 'FILL' 1;">favorite</span>
             <span class="font-tactical text-xl text-on-surface font-bold leading-none">${p.hp}</span>
           </div>
           <div class="flex flex-col items-end gap-1">
@@ -225,13 +316,19 @@ export function renderArena() {
           <div class="flex items-end -space-x-4 flex-1 overflow-visible pb-1 px-2" id="playerHand">
             ${p.hand.map((card, idx) => renderHandCard(card, idx, p.mana)).join('')}
           </div>
-          <button id="endTurnBtn" class="shrink-0 flex flex-col items-center justify-center w-20 h-[72px] bg-primary text-on-primary hover:bg-primary-fixed-dim rounded-xl shadow-[0_4px_16px_rgba(242,202,80,0.3)] active:scale-95 transition-all border border-[#fff]/20">
+          <button id="endTurnBtn" class="shrink-0 flex flex-col items-center justify-center w-20 h-[72px] bg-primary text-on-primary hover:bg-primary-fixed-dim rounded-xl shadow-[0_4px_16px_rgba(242,202,80,0.4)] active:scale-95 transition-all border border-[#fff]/20">
             <span class="material-symbols-outlined text-lg">hourglass_top</span>
             <span class="font-display text-[9px] font-bold tracking-wider text-center mt-1">PASSA</span>
           </button>
         </div>
       </section>
     `;
+
+    // Inietta il Tutorial Overlay se attivo
+    if (gameState.tutorial && gameState.tutorial.active) {
+      el.appendChild(renderTutorialOverlay());
+    }
+
     return el;
   }
 
@@ -249,16 +346,16 @@ export function renderArena() {
     
     if (!card) {
       const clickAction = !isOpponent ? `data-action="deploy" data-slot="${idx}"` : '';
-      const hoverStyle = (!isOpponent && selectedHandIndex !== null) ? 'hover:bg-primary/20 hover:border-primary border-primary/50' : 'border-outline-variant/30';
+      const hoverStyle = (!isOpponent && selectedHandIndex !== null) ? 'hover:bg-primary/20 hover:border-primary border-primary/50 shadow-[inset_0_0_10px_rgba(242,202,80,0.2)]' : 'border-outline-variant/30';
       return `
-        <div class="slot-empty relative flex items-center justify-center rounded bg-surface-container-lowest/50 aspect-[5/7] shadow-inner border border-dashed ${hoverStyle} transition-colors cursor-pointer" ${clickAction}>
+        <div class="slot-empty relative flex items-center justify-center rounded bg-surface-container-lowest/50 aspect-[5/7] shadow-inner border border-dashed ${hoverStyle} transition-all cursor-pointer" ${clickAction}>
           <span class="material-symbols-outlined text-outline-variant text-sm opacity-30">add</span>
         </div>
       `;
     }
 
     const clickAction = !isOpponent ? `data-action="selectFriendly" data-slot="${idx}"` : `data-action="attackTarget" data-slot="${idx}"`;
-    const targetCursor = isOpponent && selectedFriendlySlot !== null ? 'cursor-crosshair hover:border-error' : 'cursor-pointer';
+    const targetCursor = isOpponent && selectedFriendlySlot !== null ? 'cursor-crosshair hover:border-error hover:shadow-[0_0_15px_rgba(248,113,113,0.5)]' : 'cursor-pointer';
 
     return `
       <div class="slot-filled relative flex flex-col bg-surface-container-high rounded p-1 shadow-md aspect-[5/7] transition-all border border-outline-variant/50 ${selectionRing} ${targetCursor}" ${clickAction}>
@@ -298,14 +395,90 @@ export function renderArena() {
     `;
   }
 
+  function renderTutorialOverlay() {
+    const overlay = document.createElement('div');
+    overlay.className = 'absolute inset-0 z-50 bg-black/70 backdrop-blur-[2px] flex flex-col justify-end p-4';
+    
+    const steps = [
+      {
+        title: "BENVENUTO NELL'ARENA",
+        text: "Guerriero, osserva i tuoi Cristalli di Mana in basso a destra. Accumulerai +1 Mana massimo ogni turno, fino a 10. Il mana non speso si accumula per turni successivi!",
+        highlight: "mana"
+      },
+      {
+        title: "SCHIERAMENTO",
+        text: "Tocca una carta dalla tua mano (se hai abbastanza mana), poi seleziona uno slot vuoto tratteggiato sul campo per schierarla. Usa con saggezza l'Attacco (Rosso) e la Difesa (Blu).",
+        highlight: "board"
+      },
+      {
+        title: "SCONTRO ALL'ULTIMO SANGUE",
+        text: "Per attaccare, tocca un tuo guerriero schierato e poi l'obiettivo nemico. Attenzione: se distruggi la Difesa nemica, il danno in eccesso trafiggerà direttamente i Punti Vita del Capitano avversario!",
+        highlight: "enemy"
+      }
+    ];
+
+    const current = steps[gameState.tutorial.step - 1];
+
+    overlay.innerHTML = `
+      <div class="absolute top-20 right-4">
+        <button id="skipTutorialBtn" class="bg-surface-container-highest/80 backdrop-blur border border-outline-variant px-3 py-1.5 rounded-full font-tactical text-[9px] font-bold text-outline hover:text-on-surface transition-colors flex items-center gap-1">
+          <span class="material-symbols-outlined text-[14px]">skip_next</span> SALTA TUTORIAL
+        </button>
+      </div>
+
+      <div class="absolute top-1/3 left-1/2 -translate-x-1/2 flex flex-col items-center animate-bounce-h text-primary">
+        <span class="font-tactical text-xs font-bold bg-surface-container-lowest/80 px-2 py-1 rounded">Segui le istruzioni</span>
+        <span class="material-symbols-outlined text-4xl">east</span>
+      </div>
+
+      <div class="bg-surface-container-low border-2 border-primary/50 rounded-xl p-4 shadow-[0_0_40px_rgba(0,0,0,0.9)] flex gap-3 relative mb-16 mx-auto w-full max-w-md">
+        <div class="absolute -top-10 -left-2 w-20 h-20 rounded-full border-2 border-primary overflow-hidden shadow-lg bg-surface-container shrink-0">
+          <img src="https://image.pollinations.ai/prompt/dark%20fantasy%20wise%20old%20master%20wizard%20portrait?width=150&height=150&nologo=true" class="w-full h-full object-cover"/>
+        </div>
+        <div class="ml-16 flex flex-col w-full">
+          <span class="font-tactical text-[10px] text-primary uppercase font-bold">Maestro d'Armi</span>
+          <h3 class="font-display font-bold text-sm text-on-surface mt-1">${current.title}</h3>
+          <p class="font-body text-xs text-on-surface-variant leading-relaxed mt-1">${current.text}</p>
+          
+          <div class="flex justify-end mt-3">
+            <button id="nextTutorialBtn" class="bg-primary hover:bg-primary-fixed-dim text-on-primary font-tactical font-bold text-xs px-5 py-2 rounded shadow-lg active:scale-95 transition-all">
+              ${gameState.tutorial.step === steps.length ? 'INIZIA BATTAGLIA' : 'AVANTI'}
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+
+    overlay.querySelector('#skipTutorialBtn').onclick = () => {
+      gameState.tutorial.active = false;
+      updateUI();
+    };
+
+    overlay.querySelector('#nextTutorialBtn').onclick = () => {
+      if (gameState.tutorial.step < steps.length) {
+        gameState.tutorial.step++;
+      } else {
+        gameState.tutorial.active = false;
+      }
+      updateUI();
+    };
+
+    return overlay;
+  }
+
   function attachBattleListeners() {
     container.querySelector('#endTurnBtn').addEventListener('click', executeBotTurn);
     
     container.querySelector('#enemyHeroTarget').addEventListener('click', () => {
-      if (selectedFriendlySlot !== null) resolveAttack(selectedFriendlySlot, 'hero');
+      if (selectedFriendlySlot !== null && (!gameState.tutorial || !gameState.tutorial.active)) {
+        resolveAttack(selectedFriendlySlot, 'hero');
+      }
     });
 
     container.addEventListener('click', (e) => {
+      // Blocca le interazioni se il tutorial è attivo
+      if (gameState.tutorial && gameState.tutorial.active) return;
+
       const target = e.target.closest('[data-action]');
       if (!target) return;
 
@@ -318,9 +491,9 @@ export function renderArena() {
           selectedHandIndex = selectedHandIndex === idx ? null : idx;
           selectedFriendlySlot = null;
           updateUI();
-          logMsg(`Selezionata carta: ${card.name}. Scegli uno slot vuoto per schierarla.`);
+          if(selectedHandIndex !== null) logMsg(`Hai preparato: ${card.name}. Scegli uno slot vuoto.`);
         } else {
-          logMsg("Mana insufficiente!", true);
+          logMsg("Rune di Mana insufficienti!", true);
         }
       } 
       else if (action === 'deploy') {
@@ -333,7 +506,7 @@ export function renderArena() {
           gameState.player.hand.splice(selectedHandIndex, 1);
           
           selectedHandIndex = null;
-          logMsg(`Schierato ${card.name} nello slot ${slotIdx + 1}.`);
+          logMsg(`Hai schierato ${card.name} con successo.`);
           updateUI();
         }
       } 
@@ -342,7 +515,7 @@ export function renderArena() {
         selectedFriendlySlot = selectedFriendlySlot === idx ? null : idx;
         selectedHandIndex = null;
         updateUI();
-        if(selectedFriendlySlot !== null) logMsg("Scegli un bersaglio nemico da attaccare.");
+        if(selectedFriendlySlot !== null) logMsg("Scegli il tuo bersaglio...");
       }
       else if (action === 'attackTarget') {
         if (selectedFriendlySlot !== null) {
@@ -358,7 +531,7 @@ export function renderArena() {
     
     if (defenderTarget === 'hero') {
       gameState.opponent.hp -= attacker.attack;
-      logMsg(`${attacker.name} infligge ${attacker.attack} danni all'Inquisitore!`);
+      logMsg(`${attacker.name} sferra un colpo critico all'Eroe nemico: ${attacker.attack} danni!`);
     } else {
       const defender = gameState.opponent.board[defenderTarget];
       let damageToDef = attacker.attack;
@@ -366,12 +539,12 @@ export function renderArena() {
 
       if (damageToDef >= defender.currentDef) {
         excessDamage = damageToDef - defender.currentDef;
-        logMsg(`${attacker.name} distrugge ${defender.name}! ${excessDamage > 0 ? `(${excessDamage} in eccesso)` : ''}`);
+        logMsg(`${attacker.name} polverizza ${defender.name}! ${excessDamage > 0 ? `(${excessDamage} danni trafiggono l'Eroe)` : ''}`);
         gameState.opponent.board[defenderTarget] = null;
         if (excessDamage > 0) gameState.opponent.hp -= excessDamage;
       } else {
         defender.currentDef -= damageToDef;
-        logMsg(`${attacker.name} colpisce ${defender.name}. Difesa rimanente: ${defender.currentDef}.`);
+        logMsg(`${attacker.name} indebolisce ${defender.name}. Difesa residua: ${defender.currentDef}.`);
       }
     }
 
@@ -380,14 +553,16 @@ export function renderArena() {
     if (gameState.opponent.hp <= 0) {
       gameState.opponent.hp = 0;
       updateUI();
-      setTimeout(() => alert("VITTORIA! Hai sconfitto l'IA."), 500);
+      setTimeout(() => alert("IL SANCTUM È TUO! Hai trionfato."), 500);
       return;
     }
     updateUI();
   }
 
   function executeBotTurn() {
-    logMsg("Turno Avversario in corso...");
+    if (gameState.tutorial && gameState.tutorial.active) return;
+
+    logMsg("Il nemico sta meditando la sua mossa...");
     selectedHandIndex = null;
     selectedFriendlySlot = null;
     updateUI();
@@ -406,16 +581,16 @@ export function renderArena() {
         const pCard = gameState.player.board[playerTargetIdx];
         if (botCard.attack >= pCard.currentDef) {
           gameState.player.board[playerTargetIdx] = null;
-          logMsg(`Il Bot usa ${botCard.name} e distrugge il tuo ${pCard.name}!`, true);
+          logMsg(`${botCard.name} nemico distrugge spietatamente il tuo ${pCard.name}!`, true);
         } else {
           pCard.currentDef -= botCard.attack;
-          logMsg(`Il Bot usa ${botCard.name} contro ${pCard.name}.`, true);
+          logMsg(`${botCard.name} nemico attacca ${pCard.name}.`, true);
         }
       } else if (botCard) {
         gameState.player.hp -= botCard.attack;
-        logMsg(`Il Bot attacca direttamente! Subisci ${botCard.attack} danni.`, true);
+        logMsg(`${botCard.name} carica direttamente contro di te! Subisci ${botCard.attack} danni.`, true);
       } else {
-        logMsg("Il Bot passa il turno senza attaccare.");
+        logMsg("L'Avversario rafforza le difese e passa il turno.");
       }
 
       updateUI();

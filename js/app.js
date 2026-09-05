@@ -5,6 +5,8 @@ import { renderArena } from './views/arenaView.js';
 import { renderCampaign } from './views/campaignView.js';
 import { renderCollection } from './views/collectionView.js';
 import { renderShop } from './views/shopView.js';
+import { renderProfileModal } from './views/profileModalView.js';
+import { renderQuestsModal } from './views/questsModalView.js';
 
 const viewMap = {
   arena: renderArena,
@@ -29,16 +31,18 @@ export function navigate(viewName) {
 
 window.navigate = navigate;
 
+// Esponi le funzioni dei modali globali
+window.openProfile = () => renderProfileModal();
+window.openQuests = () => renderQuestsModal();
+
 async function loadDatabases() {
   try {
     const response = await fetch('/data/cards.json');
     if (response.ok) {
       gameState.databases.cards = await response.json();
-    } else {
-      console.error("Errore HTTP durante il fetch di cards.json:", response.status);
     }
   } catch (error) {
-    console.error("Errore nel caricamento del database carte:", error);
+    console.error("Errore nel caricamento del database:", error);
   }
 }
 
@@ -48,6 +52,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   const session = getSession();
   if (!session) {
     renderAuthModal((user) => {
+      gameState.player.username = user.username;
       document.getElementById('silverCount').textContent = user.silver;
       document.getElementById('gemsCount').textContent = user.gems;
       navigate('arena');
@@ -55,6 +60,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   } else {
     gameState.currencies.silver = session.user.silver;
     gameState.currencies.gems = session.user.gems;
+    gameState.player.username = session.user.username;
     if (session.user.playerCard) {
       gameState.player.avatarCard = session.user.playerCard;
     }

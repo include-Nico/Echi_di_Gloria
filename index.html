@@ -30,39 +30,55 @@
   <style>
     ::-webkit-scrollbar { display: none; }
     * { -ms-overflow-style: none; scrollbar-width: none; }
-    
-    /* Blocca l'intera finestra per evitare il rimbalzo su iOS */
     body { position: fixed; inset: 0; overscroll-behavior: none; }
+    
+    /* Animazioni per il Tutorial */
+    @keyframes bounce-horizontal {
+      0%, 100% { transform: translateX(0); }
+      50% { transform: translateX(10px); }
+    }
+    .animate-bounce-h { animation: bounce-horizontal 1.5s infinite ease-in-out; }
   </style>
 </head>
 <body class="bg-surface font-body text-on-surface antialiased select-none">
   
-  <!-- HEADER FISSO -->
   <header class="absolute top-0 left-0 w-full h-16 z-50 bg-surface-container-lowest/90 backdrop-blur-md border-b border-surface-container-high flex justify-center">
     <div class="w-full max-w-4xl px-4 flex items-center justify-between">
-      <div class="flex items-center gap-2">
+      <div class="flex items-center gap-2 pointer-events-auto">
         <span class="material-symbols-outlined text-primary text-2xl">shield</span>
-        <span class="font-display font-bold text-primary tracking-wide">Echi di Gloria</span>
+        <span class="font-display font-bold text-primary tracking-wide hidden sm:block">Echi di Gloria</span>
       </div>
-      <div class="flex items-center gap-3 font-tactical text-xs">
-        <div class="flex items-center gap-1 bg-surface-container px-2 py-1 rounded">
+      
+      <div class="flex items-center gap-2 md:gap-3 font-tactical text-xs pointer-events-auto">
+        <div class="flex items-center gap-1 bg-surface-container px-2 py-1 rounded shadow-inner">
           <span class="material-symbols-outlined text-primary text-sm">monetization_on</span>
           <span id="silverCount">--</span>
         </div>
-        <div class="flex items-center gap-1 bg-surface-container px-2 py-1 rounded">
+        <div class="flex items-center gap-1 bg-surface-container px-2 py-1 rounded shadow-inner">
           <span class="material-symbols-outlined text-secondary text-sm">diamond</span>
           <span id="gemsCount">--</span>
         </div>
+        
+        <div class="h-6 w-px bg-outline-variant/50 mx-1"></div>
+        
+        <!-- Pulsante Missioni -->
+        <button onclick="openQuests()" class="relative flex items-center justify-center p-1.5 rounded-full bg-surface-container-high hover:bg-surface-container-highest transition-colors text-primary active:scale-95 shadow">
+          <span class="material-symbols-outlined text-lg">assignment</span>
+          <span class="absolute top-0 right-0 w-2.5 h-2.5 bg-error rounded-full border border-surface-container-lowest"></span>
+        </button>
+        
+        <!-- Pulsante Profilo -->
+        <button onclick="openProfile()" class="relative flex items-center justify-center p-1 rounded-full bg-primary/20 border border-primary/50 hover:bg-primary/30 transition-colors active:scale-95 shadow">
+          <span class="material-symbols-outlined text-primary text-xl">account_circle</span>
+        </button>
       </div>
     </div>
   </header>
 
-  <!-- MAIN SCROLLABILE (ancorato in modo assoluto tra Header e Footer) -->
   <main id="appRoot" class="absolute top-16 bottom-16 left-0 right-0 w-full max-w-4xl mx-auto overflow-y-auto scroll-smooth bg-surface/50 border-x border-surface-container-high/30"></main>
 
-  <!-- NAVBAR FISSA IN BASSO -->
-  <nav class="absolute bottom-0 left-0 w-full h-16 z-50 bg-surface-container-lowest/95 backdrop-blur-md border-t border-surface-container-high flex justify-center">
-    <div class="w-full max-w-4xl flex items-center justify-around font-tactical text-[10px] md:text-xs">
+  <nav class="absolute bottom-0 left-0 w-full h-16 z-40 bg-surface-container-lowest/95 backdrop-blur-md border-t border-surface-container-high flex justify-center">
+    <div class="w-full max-w-4xl flex items-center justify-around pointer-events-auto font-tactical text-[10px] md:text-xs">
       <button onclick="navigate('arena')" class="nav-btn flex flex-col items-center text-primary transition-colors" data-view="arena">
         <span class="material-symbols-outlined mb-1 text-[22px]">swords</span>
         <span>Arena</span>
