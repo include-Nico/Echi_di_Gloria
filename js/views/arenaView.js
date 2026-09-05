@@ -1,22 +1,17 @@
 import { gameState } from '../state.js';
-import { FULL_CARD_DB } from '../data/cards.js';
 
 export function renderArena() {
   const container = document.createElement('div');
   container.className = 'flex flex-col w-full h-full select-none overflow-hidden relative';
 
-  // --- STATO LOCALE DELLA VISTA ---
-  let viewState = 'lobby'; // 'lobby' | 'loading' | 'battle'
+  let viewState = 'lobby'; 
   let botDifficulty = 'Facile';
   
-  // Variabili per l'interazione nel combattimento
   let selectedHandIndex = null;
   let selectedFriendlySlot = null;
 
-  // Renderizza la UI in base allo stato corrente
   function updateUI() {
     container.innerHTML = '';
-    
     if (viewState === 'lobby') {
       container.appendChild(renderLobby());
     } else if (viewState === 'loading') {
@@ -27,9 +22,6 @@ export function renderArena() {
     }
   }
 
-  // ==========================================
-  // 1. LOBBY PRE-PARTITA
-  // ==========================================
   function renderLobby() {
     const el = document.createElement('div');
     el.className = 'flex flex-col gap-4 p-4 h-full overflow-y-auto w-full max-w-md mx-auto';
@@ -39,7 +31,6 @@ export function renderArena() {
         <p class="font-tactical text-[11px] text-on-surface-variant uppercase mt-1">Scegli il tuo campo di battaglia</p>
       </div>
 
-      <!-- ALLENAMENTO E BOT -->
       <div class="bg-surface-container-low border border-outline-variant p-4 rounded-xl shadow-lg flex flex-col gap-3 relative overflow-hidden">
         <div class="absolute -right-6 -top-6 w-24 h-24 bg-error/10 rounded-full blur-2xl pointer-events-none"></div>
         <div class="flex items-center gap-2 border-b border-surface-container-high pb-2">
@@ -60,7 +51,6 @@ export function renderArena() {
         </button>
       </div>
 
-      <!-- MULTIPLAYER E AMICI -->
       <div class="bg-surface-container-low border border-outline-variant p-4 rounded-xl shadow-lg flex flex-col gap-3 relative overflow-hidden mt-2">
         <div class="absolute -left-6 -bottom-6 w-24 h-24 bg-secondary/10 rounded-full blur-2xl pointer-events-none"></div>
         <div class="flex items-center gap-2 border-b border-surface-container-high pb-2">
@@ -105,9 +95,6 @@ export function renderArena() {
     return el;
   }
 
-  // ==========================================
-  // 2. SCHERMATA DI CARICAMENTO
-  // ==========================================
   function renderLoading() {
     const el = document.createElement('div');
     el.className = 'flex flex-col items-center justify-center w-full h-full bg-surface-container-lowest p-6 text-center';
@@ -124,7 +111,6 @@ export function renderArena() {
       </div>
     `;
 
-    // Simula tempo di caricamento
     setTimeout(() => {
       const bar = el.querySelector('#loadingBar');
       if(bar) bar.style.width = '100%';
@@ -138,23 +124,26 @@ export function renderArena() {
     return el;
   }
 
-  // ==========================================
-  // 3. CAMPO DI BATTAGLIA E LOGICA
-  // ==========================================
   function initMatchState() {
-    // Inizializza lo stato della partita per il prototipo
+    const FULL_CARD_DB = gameState.databases.cards || [];
+    
     gameState.turn = 1;
     gameState.player.maxMana = 1;
     gameState.player.mana = 1;
     gameState.player.hp = 30;
     gameState.player.board = [null, null, null, null, null];
     
-    // Popola mano fittizia dal DB
+    // Fallback sicuro se il DB non dovesse aver caricato alcune carte
+    const card1 = FULL_CARD_DB.find(c => c.name === "Indigeno") || FULL_CARD_DB[0];
+    const card2 = FULL_CARD_DB.find(c => c.name === "Berserker") || FULL_CARD_DB[0];
+    const card3 = FULL_CARD_DB.find(c => c.name === "Arceri Base") || FULL_CARD_DB[0];
+    const cardBot = FULL_CARD_DB.find(c => c.name === "Crociato") || FULL_CARD_DB[0];
+
     gameState.player.hand = [
-      {...FULL_CARD_DB.find(c => c.name === "Indigeno"), currentDef: 2},
-      {...FULL_CARD_DB.find(c => c.name === "Berserker"), currentDef: 2},
-      {...FULL_CARD_DB.find(c => c.name === "Arceri Base"), currentDef: 1}
-    ];
+      card1 ? {...card1, currentDef: card1.defense} : null,
+      card2 ? {...card2, currentDef: card2.defense} : null,
+      card3 ? {...card3, currentDef: card3.defense} : null
+    ].filter(Boolean);
 
     gameState.opponent.isBot = true;
     gameState.opponent.name = `Bot ${botDifficulty}`;
@@ -164,8 +153,9 @@ export function renderArena() {
     gameState.opponent.mana = 1;
     gameState.opponent.board = [null, null, null, null, null];
     
-    // Il bot ha già una carta schierata per testare l'attacco
-    gameState.opponent.board[2] = {...FULL_CARD_DB.find(c => c.name === "Crociato"), currentDef: 3};
+    if (cardBot) {
+      gameState.opponent.board[2] = {...cardBot, currentDef: cardBot.defense};
+    }
   }
 
   function renderBattleBoard() {
@@ -175,7 +165,6 @@ export function renderArena() {
     el.className = 'flex flex-col w-full h-full';
 
     el.innerHTML = `
-      <!-- ZONA AVVERSARIO -->
       <section class="relative px-3 pt-2 pb-3 bg-gradient-to-b from-surface-container-lowest to-surface-container-low shadow-md border-b border-outline-variant/30">
         <div class="flex items-center justify-between gap-2 mb-2">
           <div class="flex items-center gap-2">
@@ -189,7 +178,6 @@ export function renderArena() {
             </div>
           </div>
           
-          <!-- Avatar Nemico Cliccabile (Bersaglio Attacco Diretto) -->
           <button id="enemyHeroTarget" class="flex items-center gap-1 bg-error-container/20 border border-error px-2 py-1 rounded shadow cursor-crosshair hover:bg-error-container/40 transition-colors">
             <span class="material-symbols-outlined text-error text-[14px]" style="font-variation-settings: 'FILL' 1;">favorite</span>
             <span class="font-tactical text-sm text-error font-bold">${o.hp}</span>
@@ -201,7 +189,6 @@ export function renderArena() {
         </div>
       </section>
 
-      <!-- LOG COMBATTIMENTO E DIVISORE -->
       <div class="relative my-2 px-3 flex flex-col gap-1 z-10 shrink-0">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2 bg-surface-container-highest/80 px-3 py-0.5 rounded-full shadow border border-primary/20">
@@ -218,7 +205,6 @@ export function renderArena() {
         </div>
       </div>
 
-      <!-- ZONA GIOCATORE -->
       <section class="relative px-3 flex flex-col gap-2 flex-1 pb-4">
         <div class="grid grid-cols-5 gap-1.5" id="playerBoard">
           ${p.board.map((card, idx) => renderBoardSlot(card, idx, false)).join('')}
@@ -249,7 +235,6 @@ export function renderArena() {
     return el;
   }
 
-  // --- HELPERS DI RENDER ---
   function renderManaCrystals(current, max) {
     let html = '';
     for (let i = 0; i < max; i++) {
@@ -313,16 +298,13 @@ export function renderArena() {
     `;
   }
 
-  // --- LOGICA INTERATTIVA (Event Delegation) ---
   function attachBattleListeners() {
     container.querySelector('#endTurnBtn').addEventListener('click', executeBotTurn);
     
-    // Attacco diretto all'Eroe Nemico
     container.querySelector('#enemyHeroTarget').addEventListener('click', () => {
       if (selectedFriendlySlot !== null) resolveAttack(selectedFriendlySlot, 'hero');
     });
 
-    // Clic sulla griglia o sulla mano
     container.addEventListener('click', (e) => {
       const target = e.target.closest('[data-action]');
       if (!target) return;
@@ -333,15 +315,14 @@ export function renderArena() {
         const idx = parseInt(target.dataset.index);
         const card = gameState.player.hand[idx];
         if (gameState.player.mana >= card.cost) {
-          selectedHandIndex = selectedHandIndex === idx ? null : idx; // Toggle
-          selectedFriendlySlot = null; // Resetta la selezione board
+          selectedHandIndex = selectedHandIndex === idx ? null : idx;
+          selectedFriendlySlot = null;
           updateUI();
           logMsg(`Selezionata carta: ${card.name}. Scegli uno slot vuoto per schierarla.`);
         } else {
           logMsg("Mana insufficiente!", true);
         }
       } 
-      
       else if (action === 'deploy') {
         if (selectedHandIndex !== null) {
           const slotIdx = parseInt(target.dataset.slot);
@@ -356,7 +337,6 @@ export function renderArena() {
           updateUI();
         }
       } 
-      
       else if (action === 'selectFriendly') {
         const idx = parseInt(target.dataset.slot);
         selectedFriendlySlot = selectedFriendlySlot === idx ? null : idx;
@@ -364,7 +344,6 @@ export function renderArena() {
         updateUI();
         if(selectedFriendlySlot !== null) logMsg("Scegli un bersaglio nemico da attaccare.");
       }
-
       else if (action === 'attackTarget') {
         if (selectedFriendlySlot !== null) {
           const targetSlot = parseInt(target.dataset.slot);
@@ -374,12 +353,10 @@ export function renderArena() {
     });
   }
 
-  // Risoluzione Combattimento (Inclusa regola "Eccedenza Danno" della prompt)
   function resolveAttack(attackerSlotIdx, defenderTarget) {
     const attacker = gameState.player.board[attackerSlotIdx];
     
     if (defenderTarget === 'hero') {
-      // Controlla se c'è Taunt/Difesa sul board (Semplificazione: puoi attaccare l'eroe solo se board vuota o carte senza Provocazione. Assumiamo attacco diretto libero per ora).
       gameState.opponent.hp -= attacker.attack;
       logMsg(`${attacker.name} infligge ${attacker.attack} danni all'Inquisitore!`);
     } else {
@@ -389,7 +366,7 @@ export function renderArena() {
 
       if (damageToDef >= defender.currentDef) {
         excessDamage = damageToDef - defender.currentDef;
-        logMsg(`${attacker.name} distrugge ${defender.name}! ${excessDamage > 0 ? `(${excessDamage} danni in eccesso all'Eroe)` : ''}`);
+        logMsg(`${attacker.name} distrugge ${defender.name}! ${excessDamage > 0 ? `(${excessDamage} in eccesso)` : ''}`);
         gameState.opponent.board[defenderTarget] = null;
         if (excessDamage > 0) gameState.opponent.hp -= excessDamage;
       } else {
@@ -398,36 +375,30 @@ export function renderArena() {
       }
     }
 
-    // L'attaccante ha agito (simulazione semplice: lo deselezioniamo)
     selectedFriendlySlot = null;
     
-    // Condizione di Vittoria
     if (gameState.opponent.hp <= 0) {
       gameState.opponent.hp = 0;
       updateUI();
       setTimeout(() => alert("VITTORIA! Hai sconfitto l'IA."), 500);
       return;
     }
-    
     updateUI();
   }
 
-  // Logica Turno Avversario (IA Semplice)
   function executeBotTurn() {
     logMsg("Turno Avversario in corso...");
     selectedHandIndex = null;
     selectedFriendlySlot = null;
-    updateUI(); // Blocca UI
+    updateUI();
 
     setTimeout(() => {
-      // Il Bot avanza di turno e ripristina mana
       gameState.turn++;
       gameState.opponent.maxMana = Math.min(10, gameState.opponent.maxMana + 1);
       gameState.opponent.mana = gameState.opponent.maxMana;
       gameState.player.maxMana = Math.min(10, gameState.player.maxMana + 1);
       gameState.player.mana = gameState.player.maxMana;
 
-      // Il bot attacca casualmente se ha creature (Simulazione Turno 2/4 dal prompt)
       const botCard = gameState.opponent.board[2];
       const playerTargetIdx = gameState.player.board.findIndex(c => c !== null);
       
@@ -447,7 +418,6 @@ export function renderArena() {
         logMsg("Il Bot passa il turno senza attaccare.");
       }
 
-      // Fine turno bot, tocca al giocatore
       updateUI();
     }, 1500);
   }
@@ -460,8 +430,6 @@ export function renderArena() {
     logEl.innerHTML = `<span class="material-symbols-outlined ${color} text-[14px]">${icon}</span> <span class="${color}">${msg}</span>`;
   }
 
-  // Inizializza al primo mount
   updateUI();
-
   return container;
 }
