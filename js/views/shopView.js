@@ -4,19 +4,23 @@ export function renderShop() {
   const container = document.createElement('div');
   container.className = 'flex flex-col gap-4 p-3 md:p-6 pb-24 h-full overflow-y-auto select-none';
 
-  const FULL_CARD_DB = gameState.databases.cards || [];
-  
-  const dailyCard = FULL_CARD_DB.find(c => c.id === 'JAP_008') || FULL_CARD_DB[0] || { cost: 0, name: "Errore Rete", rarity: "", art: "" }; 
+  // Caricamento sicuro del database
+  const FULL_CARD_DB = Array.isArray(gameState.databases.cards) && gameState.databases.cards.length > 0 
+    ? gameState.databases.cards 
+    : [{ id: 'ERROR', name: 'Errore DB', faction: 'Nessuna', rarity: 'Comune', cost: 0, attack: 0, defense: 0, art: 'https://image.pollinations.ai/prompt/error%20glitch%20card?width=400&height=560&nologo=true' }];
+
+  const dailyCard = FULL_CARD_DB.find(c => c.id === 'JAP_008') || FULL_CARD_DB[0]; 
   const dailyPrice = 450;
   const originalPrice = 650;
 
+  // Immagini bustine semplificate e pulite
   const packs = [
-    { id: 'standard', name: 'Standard', desc: '1 Non Comune Garantita', cost: 50, currency: 'silver', art: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAQLz2KyMcLOfs1r6-uM3fTKqdlemkwTYMiMjJcH6qu7TlmIE52UXwqBjxibYoory-FDFAb-oDnl_9Rlx3KOK73idvj0mpJ604YUKedW0JWo3VWBd3FQfUdZIbgOlM1q8JIh3e-x2xyFZQ6_UlaYS9b6icQKm3d837-rYsVNTkHHJ15Q4ndlX0GRbllZ7wbbOzMPjG7jYtuD13ytO6eSjKebmPKjqwYq8loYOdBw0fbv21EAdRdsgPXjA', faction: null, guarantee: 'Non Comune' },
-    { id: 'vichinghi', name: 'Vichinghi', desc: '1 Rara Garantita', cost: 100, currency: 'silver', art: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCJ_TMBRWC-iWUf3Yc5x2w_3apKtYYt3gos1HFwHakmHtduUrx3PKM7yetQCiDMJF6RlnxCwLeFG38pN04QLz9dq_p1qQ_if1qgUStwGXs-pXr5223EP3fyVIicZZ0yCFRKn0F3jTgZYBJBjTk8jpJW8E-HE9R-0lcHeFh3XDiWKyibTjP5DxlrD2mNvzXKgWtlZH88sfROIT61q9YQL2mrb61L-RkrM_NQFSZP_EUZq7NnrbLzEepDqQ', faction: 'Vichinghi', guarantee: 'Rara' },
-    { id: 'medioevo', name: 'Medioevo', desc: '1 Rara Garantita', cost: 100, currency: 'silver', art: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDWjRSdUgKcd0Ed2DO8CySiDhg8np1fu_uAgROGnMHDKXmL3OzBqgdLkuXUBRpjaP0zjkvPV9EhFP4r9ByvuNNrllmtDRNYj4G_V7d3QJ5o0_zkfteuCwRTESmMQx3DOWG0nrMAVobrMWZOduw198K7bGdc_eaKo9kA8idGphgmGUru7Yty5zn27DWJy4qN3wMtHr0_ZNJ_XBHHWVsjVfi8m4dSr2fKiXckTnAFrkQ68g0gahD_8vF4iQ', faction: 'Medioevo', guarantee: 'Rara' },
-    { id: 'giapponesi', name: 'Giapponesi', desc: '1 Rara Garantita', cost: 100, currency: 'silver', art: 'https://image.pollinations.ai/prompt/dark%20fantasy%20japanese%20shrine%20booster%20pack%20foil%20card%20art?width=400&height=300&nologo=true', faction: 'Giapponesi', guarantee: 'Rara' },
-    { id: 'nativi', name: 'Nativi', desc: '1 Rara Garantita', cost: 100, currency: 'silver', art: 'https://image.pollinations.ai/prompt/dark%20fantasy%20native%20american%20totem%20booster%20pack%20foil%20card%20art?width=400&height=300&nologo=true', faction: 'Nativi', guarantee: 'Rara' },
-    { id: 'leggendario', name: 'Leggendario', desc: '1 Epica/Legg.', cost: 200, currency: 'gems', art: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD5RvjcrHvsSqu9HWfgGZneQJb_rw7lFu3kxbTPd-PJZOlVVGcZ9zYdz-0qIOuuQjnYmy1mXBsKZgkvU-9CHgnN4GkUcScVrK_WBq0Tp2J_VW0-PR1ZaLBBQ1v3qsQPxg6fcD8adMVtfroWar9xWcx2mkgungtym0rVA4vis7xfiqQSvLYeC_LryyM2Ec-TCUhNNtc8rCBY85JHA54CM0eARzXJwfYg-k3ZStmRKL4hUONIZlPJOq8sGQ', faction: null, guarantee: 'Epica' }
+    { id: 'standard', name: 'Standard', desc: '1 Non Comune Garantita', cost: 50, currency: 'silver', art: 'https://image.pollinations.ai/prompt/simple%20brown%20leather%20card%20booster%20pack%20fantasy?width=400&height=300&nologo=true', faction: null, guarantee: 'Non Comune' },
+    { id: 'vichinghi', name: 'Vichinghi', desc: '1 Rara Garantita', cost: 100, currency: 'silver', art: 'https://image.pollinations.ai/prompt/simple%20icy%20blue%20viking%20card%20booster%20pack?width=400&height=300&nologo=true', faction: 'Vichinghi', guarantee: 'Rara' },
+    { id: 'medioevo', name: 'Medioevo', desc: '1 Rara Garantita', cost: 100, currency: 'silver', art: 'https://image.pollinations.ai/prompt/simple%20red%20and%20silver%20medieval%20card%20booster%20pack?width=400&height=300&nologo=true', faction: 'Medioevo', guarantee: 'Rara' },
+    { id: 'giapponesi', name: 'Giapponesi', desc: '1 Rara Garantita', cost: 100, currency: 'silver', art: 'https://image.pollinations.ai/prompt/simple%20black%20and%20pink%20samurai%20card%20booster%20pack?width=400&height=300&nologo=true', faction: 'Giapponesi', guarantee: 'Rara' },
+    { id: 'nativi', name: 'Nativi', desc: '1 Rara Garantita', cost: 100, currency: 'silver', art: 'https://image.pollinations.ai/prompt/simple%20green%20and%20wood%20tribal%20card%20booster%20pack?width=400&height=300&nologo=true', faction: 'Nativi', guarantee: 'Rara' },
+    { id: 'leggendario', name: 'Leggendario', desc: '1 Epica/Legg.', cost: 200, currency: 'gems', art: 'https://image.pollinations.ai/prompt/simple%20glowing%20gold%20card%20booster%20pack?width=400&height=300&nologo=true', faction: null, guarantee: 'Epica' }
   ];
 
   container.innerHTML = `
@@ -66,20 +70,12 @@ export function renderShop() {
           <div class="flex flex-col rounded-xl bg-surface-container-low p-2 shadow-md border border-surface-container-highest">
             <div class="relative w-full aspect-[4/3] rounded-lg overflow-hidden mb-2 shadow-inner border border-outline-variant/30">
               <img class="w-full h-full object-cover" src="${pack.art}" alt="${pack.name}" />
-              ${pack.faction ? `
-                <div class="absolute top-1 right-1 bg-surface-container-lowest/90 px-1.5 py-0.5 rounded font-tactical text-[8px] text-on-surface uppercase border border-outline-variant">
-                  ${pack.faction}
-                </div>
-              ` : ''}
-              <div class="absolute bottom-1 left-1 bg-surface-container-lowest/90 backdrop-blur px-1.5 py-0.5 rounded text-primary font-tactical text-[8px] font-bold border border-primary/40">
-                ${pack.desc}
-              </div>
+              ${pack.faction ? `<div class="absolute top-1 right-1 bg-surface-container-lowest/90 px-1.5 py-0.5 rounded font-tactical text-[8px] text-on-surface uppercase border border-outline-variant">${pack.faction}</div>` : ''}
+              <div class="absolute bottom-1 left-1 bg-surface-container-lowest/90 backdrop-blur px-1.5 py-0.5 rounded text-primary font-tactical text-[8px] font-bold border border-primary/40">${pack.desc}</div>
             </div>
             <span class="font-display font-bold text-xs text-on-surface truncate">${pack.name}</span>
             <button class="buy-pack-btn mt-2 py-1.5 w-full ${pack.currency === 'gems' ? 'bg-primary text-on-primary hover:bg-primary-fixed-dim' : 'bg-surface-container-highest text-on-surface hover:bg-surface-bright border border-outline-variant'} rounded flex items-center justify-center gap-1 transition-all active:scale-95 shadow" data-idx="${idx}">
-              <span class="material-symbols-outlined text-[14px] ${pack.currency === 'gems' ? 'text-secondary' : 'text-outline'}">
-                ${pack.currency === 'gems' ? 'diamond' : 'toll'}
-              </span>
+              <span class="material-symbols-outlined text-[14px] ${pack.currency === 'gems' ? 'text-secondary' : 'text-outline'}">${pack.currency === 'gems' ? 'diamond' : 'toll'}</span>
               <span class="font-tactical text-xs font-bold">${pack.cost}</span>
             </button>
           </div>
@@ -106,17 +102,13 @@ export function renderShop() {
           gameState.currencies.silver -= pack.cost;
           updateCurrencyUI();
           openBoosterPack(pack, FULL_CARD_DB);
-        } else {
-          showToast("Argento insufficiente.");
-        }
+        } else showToast("Argento insufficiente.");
       } else {
         if (gameState.currencies.gems >= pack.cost) {
           gameState.currencies.gems -= pack.cost;
           updateCurrencyUI();
           openBoosterPack(pack, FULL_CARD_DB);
-        } else {
-          showToast("Gemme insufficiente.");
-        }
+        } else showToast("Gemme insufficienti.");
       }
     });
   });
@@ -125,8 +117,10 @@ export function renderShop() {
 }
 
 function updateCurrencyUI() {
-  document.getElementById('silverCount').textContent = gameState.currencies.silver;
-  document.getElementById('gemsCount').textContent = gameState.currencies.gems;
+  const silverEl = document.getElementById('silverCount');
+  const gemsEl = document.getElementById('gemsCount');
+  if (silverEl) silverEl.textContent = gameState.currencies.silver;
+  if (gemsEl) gemsEl.textContent = gameState.currencies.gems;
 }
 
 function showToast(msg) {
@@ -149,9 +143,9 @@ function showToast(msg) {
 function openBoosterPack(packDef, FULL_CARD_DB) {
   let pool = FULL_CARD_DB;
   if (packDef.faction) {
-    pool = FULL_CARD_DB.filter(c => c.faction === packDef.faction);
+    const factionPool = FULL_CARD_DB.filter(c => c.faction === packDef.faction);
+    if (factionPool.length > 0) pool = factionPool;
   }
-  if(pool.length === 0) pool = FULL_CARD_DB;
 
   const pullRates = { 'Comune': 0.50, 'Non Comune': 0.30, 'Rara': 0.14, 'Epica': 0.05, 'Leggendaria': 0.01 };
 
@@ -162,10 +156,10 @@ function openBoosterPack(packDef, FULL_CARD_DB) {
     } else if (targetRarity) {
       filtered = pool.filter(c => c.rarity === targetRarity);
     }
-    if (filtered.length === 0) {
-      filtered = FULL_CARD_DB.filter(c => c.rarity === targetRarity) || pool; 
-    }
-    if (filtered.length === 0) filtered = FULL_CARD_DB; // Estremo fallback
+    
+    if (filtered.length === 0) filtered = FULL_CARD_DB.filter(c => c.rarity === targetRarity);
+    if (filtered.length === 0) filtered = FULL_CARD_DB; // Fallback di sicurezza
+    
     return filtered[Math.floor(Math.random() * filtered.length)];
   };
 
@@ -180,14 +174,12 @@ function openBoosterPack(packDef, FULL_CARD_DB) {
 
   const pulledCards = [];
   for (let i = 0; i < 4; i++) {
-    pulledCards.push(rollRandomCard());
+    const card = rollRandomCard();
+    if(card) pulledCards.push(card);
   }
   
-  if (packDef.guarantee === 'Epica') {
-    pulledCards.push(getCardByRarity('Epica/Leggendaria'));
-  } else {
-    pulledCards.push(getCardByRarity(packDef.guarantee));
-  }
+  const guaranteeCard = getCardByRarity(packDef.guarantee === 'Epica' ? 'Epica/Leggendaria' : packDef.guarantee);
+  if(guaranteeCard) pulledCards.push(guaranteeCard);
 
   renderPackRevealModal(pulledCards);
 }
@@ -216,15 +208,19 @@ function renderPackRevealModal(cards) {
   `;
 
   const cardsHtml = cards.map((c, i) => {
-    const rarityClass = c.rarity.replace(/\s+/g, ''); 
+    // Sicurezza per carte malformate
+    if(!c) return '';
+    const rarityClass = c.rarity ? c.rarity.replace(/\s+/g, '') : 'Comune'; 
+    const rarityText = c.rarity ? c.rarity.toUpperCase() : 'SCONOSCIUTA';
+
     return `
-    <div class="perspective w-full max-w-[120px] aspect-[5/7] mx-auto opacity-0 translate-y-10 transition-all duration-500 card-slot" data-index="${i}" data-rarity="${c.rarity}">
+    <div class="perspective w-full max-w-[120px] aspect-[5/7] mx-auto opacity-0 translate-y-10 transition-all duration-500 card-slot" data-index="${i}" data-rarity="${rarityClass}">
       <div class="preserve-3d w-full h-full relative rotate-y-180 card-inner cursor-pointer rounded overflow-hidden border border-outline-variant glow-${rarityClass}">
         <div class="backface-hidden absolute inset-0 bg-surface-container-highest">
           <img src="${c.art}" class="w-full h-full object-cover" alt="${c.name}" />
           <div class="absolute bottom-0 inset-x-0 bg-surface-container-lowest/90 px-1 py-1 text-center font-tactical font-bold text-[8px]">
             <span class="${c.rarity === 'Leggendaria' ? 'text-primary' : (c.rarity === 'Epica' ? 'text-tertiary' : 'text-on-surface')}">
-              ${c.rarity.toUpperCase()}
+              ${rarityText}
             </span>
           </div>
         </div>
