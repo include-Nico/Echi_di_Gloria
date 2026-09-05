@@ -1,4 +1,4 @@
-import { gameState } from './state.js';
+import { gameState, saveGameState, loadGameState } from './state.js';
 import { getSession } from './services/authService.js';
 import { renderAuthModal } from './views/authModalView.js';
 import { renderArena } from './views/arenaView.js';
@@ -18,6 +18,7 @@ const viewMap = {
 export function navigate(viewName) {
   if (!viewMap[viewName]) return;
   gameState.currentView = viewName;
+  saveGameState(); // Ricorda la pagina attiva al reload
 
   document.querySelectorAll('.nav-btn').forEach(btn => {
     const isActive = btn.dataset.view === viewName;
@@ -30,8 +31,6 @@ export function navigate(viewName) {
 }
 
 window.navigate = navigate;
-
-// Esponi le funzioni dei modali globali
 window.openProfile = () => renderProfileModal();
 window.openQuests = () => renderQuestsModal();
 
@@ -42,30 +41,45 @@ async function loadDatabases() {
       gameState.databases.cards = await response.json();
     }
   } catch (error) {
-    console.error("Errore nel caricamento del database:", error);
+    console.error("Errore fetch cards.json:", error);
+  }
+}
+
+// Inizializza mazzo base se collezione vuota
+function initStarterCollection() {
+  if (gameState.player.collection.length === 0 && gameState.databases.cards.length > 0) {
+    const starterCards = gameState.databases.cards.slice(0, 10);
+    starterCards.forEach(card => {
+      gameState.player.collection.push({
+        ...card,
+        level: 1,
+        copies: 1,
+        copiesNeeded: 3
+      });
+      gameState.player.deck.push(card.id);
+    });
+    saveGameState();
   }
 }
 
 window.addEventListener('DOMContentLoaded', async () => {
   await loadDatabases();
+  loadGameState();
+  initStarterCollection();
+
+  const silverEl = document.getElementById('silverCount');
+  const gemsEl = document.getElementById('gemsCount');
+  if (silverEl) silverEl.textContent = gameState.currencies.silver;
+  if (gemsEl) gemsEl.textContent = gameState.currencies.gems;
 
   const session = getSession();
-  if (!session) {
+  if (!session && !gameState.player.username) {
     renderAuthModal((user) => {
       gameState.player.username = user.username;
-      document.getElementById('silverCount').textContent = user.silver;
-      document.getElementById('gemsCount').textContent = user.gems;
-      navigate('arena');
+      saveGameState();
+      navigate(gameState.currentView || 'arena');
     });
   } else {
-    gameState.currencies.silver = session.user.silver;
-    gameState.currencies.gems = session.user.gems;
-    gameState.player.username = session.user.username;
-    if (session.user.playerCard) {
-      gameState.player.avatarCard = session.user.playerCard;
-    }
-    document.getElementById('silverCount').textContent = session.user.silver;
-    document.getElementById('gemsCount').textContent = session.user.gems;
-    navigate('arena');
+    navigate(gameState.currentView || 'arena');
   }
 });
