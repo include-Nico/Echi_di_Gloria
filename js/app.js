@@ -19,7 +19,7 @@ export function navigate(viewName) {
 
   document.querySelectorAll('.nav-btn').forEach(btn => {
     const isActive = btn.dataset.view === viewName;
-    btn.className = `nav-btn flex flex-col items-center ${isActive ? 'text-primary' : 'text-on-surface-variant'}`;
+    btn.className = `nav-btn flex flex-col items-center transition-colors ${isActive ? 'text-primary' : 'text-on-surface-variant hover:text-on-surface'}`;
   });
 
   const root = document.getElementById('appRoot');
@@ -29,10 +29,24 @@ export function navigate(viewName) {
 
 window.navigate = navigate;
 
-window.addEventListener('DOMContentLoaded', () => {
+async function loadDatabases() {
+  try {
+    const response = await fetch('/data/cards.json');
+    if (response.ok) {
+      gameState.databases.cards = await response.json();
+    } else {
+      console.error("Errore HTTP durante il fetch di cards.json:", response.status);
+    }
+  } catch (error) {
+    console.error("Errore nel caricamento del database carte:", error);
+  }
+}
+
+window.addEventListener('DOMContentLoaded', async () => {
+  await loadDatabases();
+
   const session = getSession();
   if (!session) {
-    // Utente non autenticato: mostra modal e blocca fino a login/verifica OTP
     renderAuthModal((user) => {
       document.getElementById('silverCount').textContent = user.silver;
       document.getElementById('gemsCount').textContent = user.gems;
@@ -41,6 +55,9 @@ window.addEventListener('DOMContentLoaded', () => {
   } else {
     gameState.currencies.silver = session.user.silver;
     gameState.currencies.gems = session.user.gems;
+    if (session.user.playerCard) {
+      gameState.player.avatarCard = session.user.playerCard;
+    }
     document.getElementById('silverCount').textContent = session.user.silver;
     document.getElementById('gemsCount').textContent = session.user.gems;
     navigate('arena');

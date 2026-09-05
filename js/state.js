@@ -1,28 +1,30 @@
 export const gameState = {
   currentView: 'arena',
+  databases: {
+    cards: []
+  },
   currencies: {
-    silver: 1450,
-    gems: 320
+    silver: 0,
+    gems: 0
   },
   player: {
-    hp: 28,
+    hp: 30,
     maxHp: 30,
-    mana: 3,
-    maxMana: 10,
+    mana: 1,
+    maxMana: 1,
     hand: [],
     board: [null, null, null, null, null],
-    fieldCard: null,
-    tookDamageThisTurn: true
+    avatarCard: null
   },
   opponent: {
-    name: 'Lord Malakar',
-    faction: 'Medioevo',
+    name: '',
+    faction: '',
     isBot: true,
-    hp: 26,
+    hp: 30,
     maxHp: 30,
-    mana: 4,
-    board: [null, null, null, null, null],
-    fieldCard: null
+    mana: 1,
+    maxMana: 1,
+    board: [null, null, null, null, null]
   },
-  turn: 3
+  turn: 1
 };
