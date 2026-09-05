@@ -1,5 +1,5 @@
 // Inserisci qui l'URL generato dalla Distribuzione Web App di Google Apps Script
-export const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxYlCJBCd1uBZFnd2bkecyADOuu9mMCJHRfyuJNgYcyJqbXxzhN4DV-NCbRtroOaHrcZA/exec";
+export const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyJ0DuoTExY9VvCve7iV_vJW-SPUEtHO-YzvcyhHT_4tP8saxX5KXSsfYH0llFmQipl_g/exec";
 
 export async function callBackend(payload) {
   try {
