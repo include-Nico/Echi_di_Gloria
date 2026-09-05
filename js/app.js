@@ -1,4 +1,6 @@
 import { gameState } from './state.js';
+import { getSession } from './services/authService.js';
+import { renderAuthModal } from './views/authModalView.js';
 import { renderArena } from './views/arenaView.js';
 import { renderCampaign } from './views/campaignView.js';
 import { renderCollection } from './views/collectionView.js';
@@ -28,5 +30,19 @@ export function navigate(viewName) {
 window.navigate = navigate;
 
 window.addEventListener('DOMContentLoaded', () => {
-  navigate('arena');
+  const session = getSession();
+  if (!session) {
+    // Utente non autenticato: mostra modal e blocca fino a login/verifica OTP
+    renderAuthModal((user) => {
+      document.getElementById('silverCount').textContent = user.silver;
+      document.getElementById('gemsCount').textContent = user.gems;
+      navigate('arena');
+    });
+  } else {
+    gameState.currencies.silver = session.user.silver;
+    gameState.currencies.gems = session.user.gems;
+    document.getElementById('silverCount').textContent = session.user.silver;
+    document.getElementById('gemsCount').textContent = session.user.gems;
+    navigate('arena');
+  }
 });
