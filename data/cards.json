@@ -1,72 +1,45 @@
-[
-  {
-    "id": "VIK_001",
-    "name": "Classico Vichingo Base",
-    "faction": "Vichinghi",
-    "cost": 2,
-    "attack": 3,
-    "defense": 2,
-    "rarity": "Comune",
-    "keywords": ["Furia"],
-    "art": "https://lh3.googleusercontent.com/aida-public/AB6AXuDpiMSftlbBYWJIGEuY_7L4pvuxvz8QaCn04mqLYn3TaFbX8_hR1QDLKn0UCnf3n92Mti1LHwfU442UI72CbyPLAPdUHZ6Vzs5SzThWbO4_dX2T-1_CSvKljwp3pHzATMzDbDspV8cc1cx-0BHCSVHdZf7nPunoJYq_hpDhMVhnHrEV9X8tU3gSEkvrSFM9MjLbkINf9g8IfPHy1ZCPaZlDHH4l2Z3LrpsmYcVqhWlstpKBedpzuImWCA"
-  },
-  {
-    "id": "VIK_003",
-    "name": "Berserker",
-    "faction": "Vichinghi",
-    "cost": 4,
-    "attack": 5,
-    "defense": 2,
-    "rarity": "Rara",
-    "keywords": ["Senza Paura", "Furia"],
-    "art": "https://lh3.googleusercontent.com/aida-public/AB6AXuCMtrFSEQ3-mfv9ksxWBsdZn1XSlxacxb5n41fUzfF1nVdB7l1c7-QFFga7BkbU46mA2H8sLigNQzorK9TvJ1hkLTUX8EV0mZ2X84zZhBes7g4tyB35mWTHPg7zAX3VFjnIA-qBK0HWO_4GnWRH741Fz9qD8bb-IyJitE6yRb39hdLfQxtgKA8o0c0IPtG6Jgur7Lr0HqnOBJ_HPeIX-elqF3yi_r4lFZBaMKoiM0Az333fbLsV4Tsh-A"
-  },
-  {
-    "id": "MED_001",
-    "name": "Crociato",
-    "faction": "Medioevo",
-    "cost": 2,
-    "attack": 2,
-    "defense": 3,
-    "rarity": "Comune",
-    "keywords": ["Scudo Sacro"],
-    "art": "https://lh3.googleusercontent.com/aida-public/AB6AXuA0C5LMqAmqkr4WDknoWSJE0Cz__qdsbRDLa0i922VXOS9OmCdwOwV_HwU5yO_Cr9H0QlMd7n-9yeoik0liA6cSLM1qF_CQq5coJGS7B4tJZixvDiJys1IGbpDCz9nFmU48whiKd14Qd6wKF0eUcbM_8b8CjHYHOEHpM37MRZutv5_-W-M7DKfiUietsGeuezdPbaMbcy4U9Yo4aac3E0YfOd7O3Uk500C39-vEOI8Wsi-7QwKH54_XgQ"
-  },
-  {
-    "id": "MED_003",
-    "name": "Balestrieri",
-    "faction": "Medioevo",
-    "cost": 3,
-    "attack": 4,
-    "defense": 1,
-    "rarity": "Comune",
-    "keywords": ["Carica Lenta"],
-    "art": "https://lh3.googleusercontent.com/aida-public/AB6AXuDnEMFHV2y7EDwIN8LcWTyF351WxJ0Wkc4NkLYg4X-A4shpTOlC_6n6-wmx1jnV59G_hdjpu14VUKMxwmPDnai62B_f87QTiCqDzMTXHlqjI65bk1f3nCdIbe7tyd-_BYR3A_NlSKYPNqoD1Z2QCWdrGbxXD8U8PqcsiUZkSV9U132jXGoGg4dAWOWJ1hoEi8WYdYY-6nhyf_v3KBkUT6QeVz6KBbVV-mszjmogE969k9rC3XOTrocNhA"
-  },
-  {
-    "id": "NAT_001",
-    "name": "Indigeno",
-    "faction": "Nativi",
-    "cost": 1,
-    "attack": 1,
-    "defense": 2,
-    "rarity": "Comune",
-    "keywords": ["Sopravvivenza"],
-    "art": "https://lh3.googleusercontent.com/aida-public/AB6AXuD_r7cYtNiag3ya5OawcWvIKXMBN00-bi-PHXio5_Ev2yCMSw3PN5-xFRsqe6uDbcH-Y42j3DHYbuzlgZJIGn5pSCheQxMoWNoUwe4izfwhoJnHaZeZOkKJ-olqPkKpF7QEkQ451N2eVRxveQWkEDqlr8PqxyHO1bnsKOlT3ooZi7byjObfyvzSDbssDcaI_21b3XgV0dfregHf7XkAYT2NsdTetCpn4o6FyubTtYFxGTtv9djLwUYzNg"
-  },
-  {
-    "id": "VIK_007",
-    "name": "Thor",
-    "faction": "Vichinghi",
-    "cost": 8,
-    "attack": 7,
-    "defense": 7,
-    "rarity": "Leggendaria",
-    "ability": {
-      "name": "Martello di Tuono",
-      "cost": 3,
-      "desc": "Infligge 4 danni a tutte le creature nemiche"
-    },
-    "art": "https://lh3.googleusercontent.com/aida-public/AB6AXuBhLXQE4vk8EKd2Ety4Y2ix-qO6-pX54YodeiuL7MvAqvKhiGv47uIrk_IfoCXYrSe-RHQU26lvve1aWuZdGEXycS8LjoxrdxgQHX0R0tCvI_B50a08EsNmzJ2nUA_pIDNCCDKv2P7XyV4f4Iw7Xd-6ylNDs-6vlBJQ1Z0UznwPKG8FDDnetbt_XIhYXcR0aURzOiGxjJFn7Zv0cCLILeyZHU9gRut18DoIsgdRIldLD-k1zBgfJ0jnIQ"
-  }
-]
+export const FULL_CARD_DB = [
+  // VICHINGHI
+  { id: "VIK_001", name: "Classico Vichingo Base", faction: "Vichinghi", rarity: "Comune", cost: 2, attack: 3, defense: 2, level: 1, copies: 0, copiesNeeded: 5, inDeck: 0, desc: "Furia: Costano meno se hai subito danni.", art: "https://image.pollinations.ai/prompt/dark%20fantasy%20viking%20warrior%20card%20art?width=400&height=560&nologo=true" },
+  { id: "VIK_002", name: "Arceri Base", faction: "Vichinghi", rarity: "Comune", cost: 3, attack: 2, defense: 1, level: 1, copies: 0, copiesNeeded: 5, inDeck: 0, desc: "Pioggia di Frecce: Infligge 1 danno all'entrata.", art: "https://image.pollinations.ai/prompt/dark%20fantasy%20viking%20archer%20bow%20card%20art?width=400&height=560&nologo=true" },
+  { id: "VIK_003", name: "Berserker", faction: "Vichinghi", rarity: "Rara", cost: 4, attack: 5, defense: 2, level: 1, copies: 0, copiesNeeded: 3, inDeck: 0, desc: "Senza Paura: Attacca subito, non bersagliabile.", art: "https://image.pollinations.ai/prompt/dark%20fantasy%20viking%20berserker%20rage%20card%20art?width=400&height=560&nologo=true" },
+  { id: "VIK_004", name: "Re Vichingo", faction: "Vichinghi", rarity: "Epica", cost: 6, attack: 4, defense: 6, level: 1, copies: 0, copiesNeeded: 2, inDeck: 0, desc: "Grido di Guerra: +2 Attacco a tutti i Vichinghi (Costo 2).", art: "https://image.pollinations.ai/prompt/dark%20fantasy%20viking%20king%20on%20throne%20card%20art?width=400&height=560&nologo=true" },
+  { id: "VIK_005", name: "Nave Vichinga", faction: "Vichinghi", rarity: "Rara", cost: 5, attack: 0, defense: 5, level: 1, copies: 0, copiesNeeded: 3, inDeck: 0, desc: "Sbarco: Evoca un Vichingo Base gratis.", art: "https://image.pollinations.ai/prompt/dark%20fantasy%20viking%20longship%20sea%20card%20art?width=400&height=560&nologo=true" },
+  { id: "VIK_006", name: "Valchirie", faction: "Vichinghi", rarity: "Epica", cost: 5, attack: 3, defense: 4, level: 1, copies: 0, copiesNeeded: 2, inDeck: 0, desc: "Scelta del Caduto: +2 Attacco quando muore una tua creatura.", art: "https://image.pollinations.ai/prompt/dark%20fantasy%20valkyrie%20wings%20spear%20card%20art?width=400&height=560&nologo=true" },
+  { id: "VIK_007", name: "Thor", faction: "Vichinghi", rarity: "Leggendaria", cost: 8, attack: 7, defense: 7, level: 1, copies: 0, copiesNeeded: 1, inDeck: 0, desc: "Martello di Tuono: 4 danni a tutte le creature nemiche (Costo 3).", art: "https://image.pollinations.ai/prompt/thor%20god%20of%20thunder%20dark%20fantasy%20card%20art?width=400&height=560&nologo=true" },
+  { id: "VIK_008", name: "Odino", faction: "Vichinghi", rarity: "Leggendaria", cost: 9, attack: 6, defense: 9, level: 1, copies: 0, copiesNeeded: 1, inDeck: 0, desc: "Saggezza dei Caduti: Pesca 1 guardando le prime 3 carte.", art: "https://image.pollinations.ai/prompt/odin%20allfather%20dark%20fantasy%20card%20art?width=400&height=560&nologo=true" },
+  { id: "VIK_009", name: "Valhalla", faction: "Vichinghi", rarity: "Epica", cost: 4, attack: 0, defense: 0, level: 1, copies: 0, copiesNeeded: 2, inDeck: 0, desc: "CARTA CAMPO. Le creature Vichinghi morte diventano 2/2. Tutti i Vichinghi +1 Difesa.", art: "https://image.pollinations.ai/prompt/valhalla%20hall%20of%20slain%20dark%20fantasy%20card%20art?width=400&height=560&nologo=true" },
+
+  // MEDIOEVO
+  { id: "MED_001", name: "Crociato", faction: "Medioevo", rarity: "Comune", cost: 2, attack: 2, defense: 3, level: 1, copies: 0, copiesNeeded: 5, inDeck: 0, desc: "Scudo Sacro: Annulla il primo danno.", art: "https://image.pollinations.ai/prompt/dark%20fantasy%20templar%20crusader%20shield%20card%20art?width=400&height=560&nologo=true" },
+  { id: "MED_002", name: "Giullare", faction: "Medioevo", rarity: "Comune", cost: 2, attack: 1, defense: 2, level: 1, copies: 0, copiesNeeded: 5, inDeck: 0, desc: "Distrazione: Avversario scarta 1 carta.", art: "https://image.pollinations.ai/prompt/dark%20fantasy%20medieval%20jester%20creepy%20card%20art?width=400&height=560&nologo=true" },
+  { id: "MED_003", name: "Balestrieri", faction: "Medioevo", rarity: "Comune", cost: 3, attack: 4, defense: 1, level: 1, copies: 0, copiesNeeded: 5, inDeck: 0, desc: "Carica Lenta: Non attacca al primo turno.", art: "https://image.pollinations.ai/prompt/dark%20fantasy%20medieval%20crossbowman%20card%20art?width=400&height=560&nologo=true" },
+  { id: "MED_004", name: "A Cavallo", faction: "Medioevo", rarity: "Rara", cost: 4, attack: 4, defense: 3, level: 1, copies: 0, copiesNeeded: 3, inDeck: 0, desc: "Carica: +2 danno se attacca per primo.", art: "https://image.pollinations.ai/prompt/dark%20fantasy%20medieval%20cavalry%20knight%20card%20art?width=400&height=560&nologo=true" },
+  { id: "MED_005", name: "Balestra d'Assedio", faction: "Medioevo", rarity: "Rara", cost: 5, attack: 6, defense: 2, level: 1, copies: 0, copiesNeeded: 3, inDeck: 0, desc: "Assedio: Colpisce direttamente i PV se nessuna creatura ha D>6.", art: "https://image.pollinations.ai/prompt/dark%20fantasy%20medieval%20ballista%20siege%20card%20art?width=400&height=560&nologo=true" },
+  { id: "MED_006", name: "Templari", faction: "Medioevo", rarity: "Epica", cost: 5, attack: 4, defense: 5, level: 1, copies: 0, copiesNeeded: 2, inDeck: 0, desc: "Benedizione: Cura 2 PV se hai più creature.", art: "https://image.pollinations.ai/prompt/dark%20fantasy%20holy%20templar%20paladin%20card%20art?width=400&height=560&nologo=true" },
+  { id: "MED_007", name: "Strega", faction: "Medioevo", rarity: "Rara", cost: 4, attack: 2, defense: 3, level: 1, copies: 0, copiesNeeded: 3, inDeck: 0, desc: "Malocchio: Trasforma in Rospo 1/1 per 2 turni (Costo 2).", art: "https://image.pollinations.ai/prompt/dark%20fantasy%20medieval%20witch%20magic%20card%20art?width=400&height=560&nologo=true" },
+  { id: "MED_008", name: "RE", faction: "Medioevo", rarity: "Leggendaria", cost: 7, attack: 5, defense: 7, level: 1, copies: 0, copiesNeeded: 1, inDeck: 0, desc: "Volontà del Sovrano: +1/+1 per ogni creatura Medioevo.", art: "https://image.pollinations.ai/prompt/dark%20fantasy%20medieval%20king%20sword%20card%20art?width=400&height=560&nologo=true" },
+  { id: "MED_009", name: "Gerusalemme Celeste", faction: "Medioevo", rarity: "Epica", cost: 5, attack: 0, defense: 0, level: 1, copies: 0, copiesNeeded: 2, inDeck: 0, desc: "CARTA CAMPO. Tutte le creature Medioevo hanno Scudo Sacro. PV non possono scendere sotto 1 se hai creature.", art: "https://image.pollinations.ai/prompt/heavenly%20jerusalem%20divine%20city%20card%20art?width=400&height=560&nologo=true" },
+
+  // GIAPPONESI
+  { id: "JAP_001", name: "Armata Giapponese", faction: "Giapponesi", rarity: "Comune", cost: 2, attack: 2, defense: 2, level: 1, copies: 0, copiesNeeded: 5, inDeck: 0, desc: "Disciplina: +1 Attacco se hai altro Giapponese.", art: "https://image.pollinations.ai/prompt/dark%20fantasy%20ashigaru%20japanese%20infantry%20card%20art?width=400&height=560&nologo=true" },
+  { id: "JAP_002", name: "Ninja", faction: "Giapponesi", rarity: "Comune", cost: 3, attack: 3, defense: 2, level: 1, copies: 0, copiesNeeded: 5, inDeck: 0, desc: "Ombra: 2 danni a una creatura all'entrata.", art: "https://image.pollinations.ai/prompt/dark%20fantasy%20shinobi%20ninja%20shadow%20card%20art?width=400&height=560&nologo=true" },
+  { id: "JAP_003", name: "Samurai", faction: "Giapponesi", rarity: "Rara", cost: 4, attack: 4, defense: 4, level: 1, copies: 0, copiesNeeded: 3, inDeck: 0, desc: "Onore: Pesca 1 se uccide una creatura.", art: "https://image.pollinations.ai/prompt/dark%20fantasy%20samurai%20katana%20card%20art?width=400&height=560&nologo=true" },
+  { id: "JAP_004", name: "Arceri", faction: "Giapponesi", rarity: "Rara", cost: 3, attack: 3, defense: 1, level: 1, copies: 0, copiesNeeded: 3, inDeck: 0, desc: "Freccia Avvelenata: -1 Attacco per 2 turni (Costo 1).", art: "https://image.pollinations.ai/prompt/dark%20fantasy%20japanese%20kyudo%20archer%20card%20art?width=400&height=560&nologo=true" },
+  { id: "JAP_005", name: "Shogun", faction: "Giapponesi", rarity: "Epica", cost: 6, attack: 5, defense: 5, level: 1, copies: 0, copiesNeeded: 2, inDeck: 0, desc: "Comando Unificato: Tutti i Giapponesi attaccano subito.", art: "https://image.pollinations.ai/prompt/dark%20fantasy%20shogun%20warlord%20armor%20card%20art?width=400&height=560&nologo=true" },
+  { id: "JAP_006", name: "Gheishe", faction: "Giapponesi", rarity: "Rara", cost: 3, attack: 1, defense: 3, level: 1, copies: 0, copiesNeeded: 3, inDeck: 0, desc: "Incanto: Prendi controllo di una creatura A<3 fino a fine turno (Costo 2).", art: "https://image.pollinations.ai/prompt/dark%20fantasy%20geisha%20magic%20card%20art?width=400&height=560&nologo=true" },
+  { id: "JAP_007", name: "Jin", faction: "Giapponesi", rarity: "Epica", cost: 5, attack: 4, defense: 4, level: 1, copies: 0, copiesNeeded: 2, inDeck: 0, desc: "Spirito Vendicativo: Distrugge chi l'ha uccisa.", art: "https://image.pollinations.ai/prompt/dark%20fantasy%20oni%20demon%20jin%20card%20art?width=400&height=560&nologo=true" },
+  { id: "JAP_008", name: "Drago Celeste", faction: "Giapponesi", rarity: "Leggendaria", cost: 8, attack: 7, defense: 6, level: 1, copies: 0, copiesNeeded: 1, inDeck: 0, desc: "Soffio di Vento: Rimanda in mano tutte le creature nemiche con A<4 (Costo 4).", art: "https://image.pollinations.ai/prompt/celestial%20azure%20dragon%20japanese%20myth%20card%20art?width=400&height=560&nologo=true" },
+  { id: "JAP_009", name: "Castello di Osaka", faction: "Giapponesi", rarity: "Epica", cost: 5, attack: 0, defense: 0, level: 1, copies: 0, copiesNeeded: 2, inDeck: 0, desc: "CARTA CAMPO. Giapponesi non bersagliabili. Quando muoiono, peschi 1.", art: "https://image.pollinations.ai/prompt/osaka%20castle%20dark%20night%20cherry%20blossoms%20card%20art?width=400&height=560&nologo=true" },
+
+  // NATIVI
+  { id: "NAT_001", name: "Indigeno", faction: "Nativi", rarity: "Comune", cost: 1, attack: 1, defense: 2, level: 1, copies: 0, copiesNeeded: 5, inDeck: 0, desc: "Sopravvivenza: +1 Difesa per ogni altro Nativi.", art: "https://image.pollinations.ai/prompt/dark%20fantasy%20native%20american%20warrior%20card%20art?width=400&height=560&nologo=true" },
+  { id: "NAT_002", name: "Arcere", faction: "Nativi", rarity: "Comune", cost: 2, attack: 2, defense: 1, level: 1, copies: 0, copiesNeeded: 5, inDeck: 0, desc: "Freccia Silenziosa: Attacca senza contrattacco.", art: "https://image.pollinations.ai/prompt/dark%20fantasy%20native%20american%20archer%20stealth%20card%20art?width=400&height=560&nologo=true" },
+  { id: "NAT_003", name: "Capo Tribù", faction: "Nativi", rarity: "Rara", cost: 4, attack: 3, defense: 4, level: 1, copies: 0, copiesNeeded: 3, inDeck: 0, desc: "Totem della Tribù: Aggiunge 1 segnalino Totem per ogni Nativi giocato.", art: "https://image.pollinations.ai/prompt/dark%20fantasy%20native%20american%20chief%20headdress%20card%20art?width=400&height=560&nologo=true" },
+  { id: "NAT_004", name: "Condottiero", faction: "Nativi", rarity: "Epica", cost: 5, attack: 5, defense: 4, level: 1, copies: 0, copiesNeeded: 2, inDeck: 0, desc: "Carica della Prateria: Costa 2 in meno se hai 3+ Totem.", art: "https://image.pollinations.ai/prompt/dark%20fantasy%20native%20american%20cavalry%20horse%20card%20art?width=400&height=560&nologo=true" },
+  { id: "NAT_005", name: "Sciamano", faction: "Nativi", rarity: "Rara", cost: 4, attack: 2, defense: 4, level: 1, copies: 0, copiesNeeded: 3, inDeck: 0, desc: "Richiamo degli Spiriti: Evoca 2/2 per ogni 3 Totem (Costo 2).", art: "https://image.pollinations.ai/prompt/dark%20fantasy%20native%20american%20shaman%20magic%20card%20art?width=400&height=560&nologo=true" },
+  { id: "NAT_006", name: "Guaritori", faction: "Nativi", rarity: "Comune", cost: 3, attack: 1, defense: 3, level: 1, copies: 0, copiesNeeded: 5, inDeck: 0, desc: "Canto di Cura: Cura 2 PV per ogni Totem (Max 4).", art: "https://image.pollinations.ai/prompt/dark%20fantasy%20native%20american%20healer%20medicine%20card%20art?width=400&height=560&nologo=true" },
+  { id: "NAT_007", name: "Bisonte Fantasma", faction: "Nativi", rarity: "Epica", cost: 6, attack: 5, defense: 6, level: 1, copies: 0, copiesNeeded: 2, inDeck: 0, desc: "Carica Fantasma: Danna tutte le creature nemiche con D<3.", art: "https://image.pollinations.ai/prompt/spectral%20ghost%20bison%20spirit%20card%20art?width=400&height=560&nologo=true" },
+  { id: "NAT_008", name: "Sacrificio", faction: "Nativi", rarity: "Rara", cost: 3, attack: 0, defense: 0, level: 1, copies: 0, copiesNeeded: 3, inDeck: 0, desc: "Olocausto: Sacrifica una creatura Nativi, pesca 3 carte e guadagni 3 Totem.", art: "https://image.pollinations.ai/prompt/tribal%20sacrifice%20ritual%20fire%20card%20art?width=400&height=560&nologo=true" },
+  { id: "NAT_009", name: "Terra Sacra", faction: "Nativi", rarity: "Epica", cost: 4, attack: 0, defense: 0, level: 1, copies: 0, copiesNeeded: 2, inDeck: 0, desc: "CARTA CAMPO. I segnalini Totem raddoppiano. Tutte le creature Nativi hanno Trappola.", art: "https://image.pollinations.ai/prompt/sacred%20mesa%20native%20totem%20poles%20card%20art?width=400&height=560&nologo=true" }
+];

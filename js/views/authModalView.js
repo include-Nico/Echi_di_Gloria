@@ -11,7 +11,6 @@ export function renderAuthModal(onSuccessCallback) {
 
   container.innerHTML = `
     <div class="relative w-full max-w-md bg-surface-container-low border border-outline-variant p-5 rounded-xl shadow-2xl flex flex-col gap-4 font-body text-on-surface my-auto">
-      <!-- Header Modale -->
       <div class="flex items-center justify-between border-b border-outline-variant pb-3">
         <div class="flex items-center gap-2">
           <span class="material-symbols-outlined text-primary text-2xl">shield_person</span>
@@ -22,15 +21,12 @@ export function renderAuthModal(onSuccessCallback) {
         </div>
       </div>
 
-      <!-- Step 1: Form Login / Registrazione -->
       <div id="authStepForm" class="flex flex-col gap-3">
-        <!-- Campo Nome Battaglia -->
         <div id="usernameField" class="flex flex-col gap-1">
           <label class="text-[11px] text-on-surface-variant font-tactical tracking-wider">NOME DEL GUERRIERO</label>
           <input id="authUsername" type="text" placeholder="Es. Ragnar_IlRosso" maxlength="20" class="w-full bg-surface-container-lowest border border-outline-variant rounded px-3 py-2 text-sm text-on-surface outline-none focus:border-primary transition-colors" />
         </div>
 
-        <!-- Faction Selector per Carta Avatar (visibile solo in Registrazione) -->
         <div id="factionSelectorField" class="flex flex-col gap-1.5">
           <div class="flex justify-between items-center">
             <label class="text-[11px] text-on-surface-variant font-tactical tracking-wider">SCEGLI LA TUA FAZIONE</label>
@@ -55,10 +51,17 @@ export function renderAuthModal(onSuccessCallback) {
             </button>
           </div>
 
-          <!-- Card Preview Miniature -->
+          <div id="genderSelectorField" class="flex flex-col gap-1 mt-1">
+            <label class="text-[11px] text-on-surface-variant font-tactical tracking-wider">GENERE AVATAR</label>
+            <div class="flex gap-2">
+              <button type="button" class="gender-opt flex-1 p-2 rounded border border-primary bg-surface-container text-primary font-tactical text-xs font-bold transition-all" data-gender="Uomo">Uomo</button>
+              <button type="button" class="gender-opt flex-1 p-2 rounded border border-outline-variant bg-surface-container-lowest text-on-surface-variant font-tactical text-xs font-bold transition-all" data-gender="Donna">Donna</button>
+            </div>
+          </div>
+
           <div id="avatarPreviewBox" class="flex items-center gap-3 bg-surface-container-lowest border border-outline-variant/60 p-2.5 rounded-lg mt-1">
             <div class="w-12 h-16 rounded overflow-hidden relative bg-surface-container-high shrink-0 border border-primary/40">
-              <img id="avatarPreviewImg" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDpiMSftlbBYWJIGEuY_7L4pvuxvz8QaCn04mqLYn3TaFbX8_hR1QDLKn0UCnf3n92Mti1LHwfU442UI72CbyPLAPdUHZ6Vzs5SzThWbO4_dX2T-1_CSvKljwp3pHzATMzDbDspV8cc1cx-0BHCSVHdZf7nPunoJYq_hpDhMVhnHrEV9X8tU3gSEkvrSFM9MjLbkINf9g8IfPHy1ZCPaZlDHH4l2Z3LrpsmYcVqhWlstpKBedpzuImWCA" alt="Avatar"/>
+              <img id="avatarPreviewImg" class="w-full h-full object-cover" src="https://image.pollinations.ai/prompt/dark%20fantasy%20male%20viking%20warrior%20portrait%20card%20art?width=400&height=560&nologo=true" alt="Avatar"/>
               <div id="avatarPreviewCost" class="absolute top-0 left-0 bg-surface-container-lowest/90 px-1 font-tactical text-[9px] text-secondary font-bold">3</div>
             </div>
             <div class="flex flex-col min-w-0 flex-1">
@@ -76,30 +79,25 @@ export function renderAuthModal(onSuccessCallback) {
           </div>
         </div>
 
-        <!-- Campo Email -->
         <div class="flex flex-col gap-1">
           <label class="text-[11px] text-on-surface-variant font-tactical tracking-wider">EMAIL PER CONFERMA SIGILLO</label>
           <input id="authEmail" type="email" placeholder="combattente@gmail.com" class="w-full bg-surface-container-lowest border border-outline-variant rounded px-3 py-2 text-sm text-on-surface outline-none focus:border-primary transition-colors" />
         </div>
 
-        <!-- Campo Password -->
         <div class="flex flex-col gap-1">
           <label class="text-[11px] text-on-surface-variant font-tactical tracking-wider">PAROLA D'ORDINE (PASSWORD)</label>
           <input id="authPassword" type="password" placeholder="••••••••" class="w-full bg-surface-container-lowest border border-outline-variant rounded px-3 py-2 text-sm text-on-surface outline-none focus:border-primary transition-colors" />
         </div>
 
-        <!-- Pulsante Principale -->
         <button id="btnPrimaryAuth" class="w-full mt-2 bg-primary hover:bg-primary-fixed-dim text-on-primary font-tactical font-bold py-2.5 rounded shadow-lg active:scale-95 transition-all">
           CONSACRA AVATAR E INVIA CODICE
         </button>
 
-        <!-- Switch Modalità -->
         <button id="btnToggleAuthMode" type="button" class="text-xs text-on-surface-variant hover:text-primary transition-colors mt-1 underline text-center">
           Hai già un grimorio? Accedi al tuo account
         </button>
       </div>
 
-      <!-- Step 2: Inserimento Codice OTP inviato via Email -->
       <div id="authStepOTP" class="hidden flex flex-col gap-3 text-center">
         <div class="flex justify-center">
           <span class="material-symbols-outlined text-4xl text-secondary animate-pulse">mark_email_read</span>
@@ -120,16 +118,15 @@ export function renderAuthModal(onSuccessCallback) {
         </button>
       </div>
 
-      <!-- Banner Errore / Feedback -->
       <div id="authErrorMsg" class="hidden text-xs text-error text-center font-tactical bg-error-container/40 border border-error/50 py-2 px-3 rounded"></div>
     </div>
   `;
 
   document.body.appendChild(container);
 
-  // LOGICA E INTERAZIONI FORM
   let isRegisterMode = true;
   let selectedFaction = "Vichinghi";
+  let selectedGender = "Uomo";
 
   const titleEl = container.querySelector('#authTitle');
   const subtitleEl = container.querySelector('#authSubtitle');
@@ -142,7 +139,6 @@ export function renderAuthModal(onSuccessCallback) {
   const stepOTP = container.querySelector('#authStepOTP');
   const errorMsg = container.querySelector('#authErrorMsg');
 
-  // Preview elements
   const inputUsername = container.querySelector('#authUsername');
   const previewName = container.querySelector('#avatarPreviewName');
   const previewImg = container.querySelector('#avatarPreviewImg');
@@ -152,18 +148,42 @@ export function renderAuthModal(onSuccessCallback) {
   const previewPerk = container.querySelector('#avatarPreviewPerk');
   const factionBadge = container.querySelector('#factionBonusBadge');
 
-  const factionArts = {
-    "Vichinghi": "https://lh3.googleusercontent.com/aida-public/AB6AXuDpiMSftlbBYWJIGEuY_7L4pvuxvz8QaCn04mqLYn3TaFbX8_hR1QDLKn0UCnf3n92Mti1LHwfU442UI72CbyPLAPdUHZ6Vzs5SzThWbO4_dX2T-1_CSvKljwp3pHzATMzDbDspV8cc1cx-0BHCSVHdZf7nPunoJYq_hpDhMVhnHrEV9X8tU3gSEkvrSFM9MjLbkINf9g8IfPHy1ZCPaZlDHH4l2Z3LrpsmYcVqhWlstpKBedpzuImWCA",
-    "Medioevo": "https://lh3.googleusercontent.com/aida-public/AB6AXuA0C5LMqAmqkr4WDknoWSJE0Cz__qdsbRDLa0i922VXOS9OmCdwOwV_HwU5yO_Cr9H0QlMd7n-9yeoik0liA6cSLM1qF_CQq5coJGS7B4tJZixvDiJys1IGbpDCz9nFmU48whiKd14Qd6wKF0eUcbM_8b8CjHYHOEHpM37MRZutv5_-W-M7DKfiUietsGeuezdPbaMbcy4U9Yo4aac3E0YfOd7O3Uk500C39-vEOI8Wsi-7QwKH54_XgQ",
-    "Giapponesi": "https://lh3.googleusercontent.com/aida-public/AB6AXuC38-XIFKSVChpxmXZg0keFEMKjRKGWwtPM9oBYh4VVJq-dJ0c4q1-vU3iwPkX1d4nl2RoKCPuBS3aTJiNNpqhub8xOJRpzp6ITu0T7o3VN1fmfrvKm_AfKqcjD7vzHQHcq7Y-_3ji1tLbbke98NFHQYgnHNYoY_6ECDKny6DnSsyGhpTA3oJZaAsaTFoLu1S9Q_kamI6Z8ILSRk0gEnn4Ebap6442kzSdJ-4C6k9YrrMQw7X7-P0G-7w",
-    "Nativi": "https://lh3.googleusercontent.com/aida-public/AB6AXuD_r7cYtNiag3ya5OawcWvIKXMBN00-bi-PHXio5_Ev2yCMSw3PN5-xFRsqe6uDbcH-Y42j3DHYbuzlgZJIGn5pSCheQxMoWNoUwe4izfwhoJnHaZeZOkKJ-olqPkKpF7QEkQ451N2eVRxveQWkEDqlr8PqxyHO1bnsKOlT3ooZi7byjObfyvzSDbssDcaI_21b3XgV0dfregHf7XkAYT2NsdTetCpn4o6FyubTtYFxGTtv9djLwUYzNg"
+  const avatarArts = {
+    "Vichinghi": {
+      "Uomo": "https://image.pollinations.ai/prompt/dark%20fantasy%20male%20viking%20warrior%20portrait%20card%20art?width=400&height=560&nologo=true",
+      "Donna": "https://image.pollinations.ai/prompt/dark%20fantasy%20female%20viking%20shieldmaiden%20portrait%20card%20art?width=400&height=560&nologo=true"
+    },
+    "Medioevo": {
+      "Uomo": "https://image.pollinations.ai/prompt/dark%20fantasy%20male%20medieval%20crusader%20knight%20portrait?width=400&height=560&nologo=true",
+      "Donna": "https://image.pollinations.ai/prompt/dark%20fantasy%20female%20medieval%20knight%20paladin%20portrait?width=400&height=560&nologo=true"
+    },
+    "Giapponesi": {
+      "Uomo": "https://image.pollinations.ai/prompt/dark%20fantasy%20male%20samurai%20ronin%20portrait%20card%20art?width=400&height=560&nologo=true",
+      "Donna": "https://image.pollinations.ai/prompt/dark%20fantasy%20female%20samurai%20onna-musha%20portrait?width=400&height=560&nologo=true"
+    },
+    "Nativi": {
+      "Uomo": "https://image.pollinations.ai/prompt/dark%20fantasy%20male%20native%20american%20tribal%20chief%20portrait?width=400&height=560&nologo=true",
+      "Donna": "https://image.pollinations.ai/prompt/dark%20fantasy%20female%20native%20american%20shaman%20portrait?width=400&height=560&nologo=true"
+    }
   };
+
+  function updatePreview() {
+    previewImg.src = avatarArts[selectedFaction][selectedGender];
+  }
 
   inputUsername.addEventListener('input', (e) => {
     previewName.textContent = e.target.value.trim() || "Guerriero";
   });
 
-  // Gestione click selezione fazione
+  container.querySelectorAll('.gender-opt').forEach(btn => {
+    btn.addEventListener('click', () => {
+      container.querySelectorAll('.gender-opt').forEach(b => b.className = 'gender-opt flex-1 p-2 rounded border border-outline-variant bg-surface-container-lowest text-on-surface-variant font-tactical text-xs font-bold transition-all');
+      btn.className = 'gender-opt flex-1 p-2 rounded border border-primary bg-surface-container text-primary font-tactical text-xs font-bold transition-all';
+      selectedGender = btn.dataset.gender;
+      updatePreview();
+    });
+  });
+
   container.querySelectorAll('.faction-opt').forEach(btn => {
     btn.addEventListener('click', () => {
       container.querySelectorAll('.faction-opt').forEach(b => {
@@ -175,17 +195,12 @@ export function renderAuthModal(onSuccessCallback) {
       btn.querySelector('.material-symbols-outlined').classList.remove('hidden');
 
       selectedFaction = btn.dataset.faction;
-      const cost = btn.dataset.cost;
-      const atk = btn.dataset.atk;
-      const def = btn.dataset.def;
-      const desc = btn.dataset.desc;
-
-      factionBadge.textContent = `COSTO ${cost} • ATK ${atk} • DEF ${def}`;
-      previewCost.textContent = cost;
-      previewAtk.textContent = atk;
-      previewDef.textContent = def;
-      previewPerk.textContent = `Sinergia: ${desc}`;
-      previewImg.src = factionArts[selectedFaction];
+      factionBadge.textContent = `COSTO ${btn.dataset.cost} • ATK ${btn.dataset.atk} • DEF ${btn.dataset.def}`;
+      previewCost.textContent = btn.dataset.cost;
+      previewAtk.textContent = btn.dataset.atk;
+      previewDef.textContent = btn.dataset.def;
+      previewPerk.textContent = `Sinergia: ${btn.dataset.desc}`;
+      updatePreview();
     });
   });
 
@@ -221,7 +236,6 @@ export function renderAuthModal(onSuccessCallback) {
     errorMsg.classList.add('hidden');
   });
 
-  // Invio Form Iniziale (Registrazione o Login)
   btnPrimary.addEventListener('click', async () => {
     const email = container.querySelector('#authEmail').value.trim();
     const pass = container.querySelector('#authPassword').value.trim();
@@ -243,7 +257,8 @@ export function renderAuthModal(onSuccessCallback) {
         email,
         username,
         password: pass,
-        faction: selectedFaction
+        faction: selectedFaction,
+        gender: selectedGender
       });
 
       btnPrimary.disabled = false;
@@ -281,7 +296,6 @@ export function renderAuthModal(onSuccessCallback) {
     }
   });
 
-  // Conferma OTP a 6 cifre
   container.querySelector('#btnVerifyOTP').addEventListener('click', async () => {
     const email = container.querySelector('#authEmail').value.trim();
     const code = container.querySelector('#authOtpInput').value.trim();
